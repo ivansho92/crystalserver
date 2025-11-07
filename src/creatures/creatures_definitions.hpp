@@ -811,6 +811,9 @@ enum CombatType_t : uint8_t {
 
 	COMBAT_COUNT = 14,
 
+	COMBAT_FIRST = COMBAT_PHYSICALDAMAGE,
+	COMBAT_LAST = COMBAT_NEUTRALDAMAGE,
+
 	// Server read only
 	COMBAT_NONE = 255
 };
@@ -1710,6 +1713,10 @@ struct Outfit_t {
 	uint8_t lookMountFeet = 0;
 	uint16_t currentMount = 0;
 	uint16_t lookFamiliarsType = 0;
+	uint16_t lookWing = 0;
+	uint16_t lookAura = 0;
+	uint16_t lookEffect = 0;
+	uint16_t lookShader = 0;
 };
 
 struct voiceBlock_t {

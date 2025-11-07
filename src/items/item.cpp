@@ -40,7 +40,12 @@
 
 Items Item::items;
 
-std::shared_ptr<Item> Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/, Position* itemPosition /*= nullptr*/) {
+std::shared_ptr<Item> Item::createItemBatch(uint16_t itemId, uint32_t count, bool wrappable /* = false*/) {
+	const auto &item = Item::CreateItem(itemId, count, nullptr, wrappable, true);
+	return item;
+};
+
+std::shared_ptr<Item> Item::CreateItem(const uint16_t type, uint16_t count /*= 0*/, Position* itemPosition /*= nullptr*/, bool createWrappableItem /* false*/, bool customCharges /* false */) {
 	// A map which contains items that, when on creating, should be transformed to the default type.
 	static const phmap::flat_hash_map<ItemID_t, ItemID_t> ItemTransformationMap = {
 		{ ITEM_SWORD_RING_ACTIVATED, ITEM_SWORD_RING },
@@ -58,8 +63,22 @@ std::shared_ptr<Item> Item::CreateItem(const uint16_t type, uint16_t count /*= 0
 	std::shared_ptr<Item> newItem = nullptr;
 
 	const ItemType &it = Item::items[type];
+	if (createWrappableItem && it.wrapable && it.wrapableTo > 0) {
+		uint16_t wrapId = it.wrapableTo;
+		auto wrappedItem = std::make_shared<Item>(wrapId, 1);
+		wrappedItem->setCustomAttribute("unWrapId", static_cast<int64_t>(type));
+		wrappedItem->setAttribute(ItemAttribute_t::DESCRIPTION, "Unwrap it in your own house to create a <" + it.name + ">.");
+		return wrappedItem;
+	}
+
 	if (it.stackable && count == 0) {
 		count = 1;
+	}
+
+	// Set the count as charges if the item is not stackable
+	const auto itemCharges = it.charges;
+	if (customCharges && !it.stackable && itemCharges > 0) {
+		count = itemCharges;
 	}
 
 	if (it.id != 0) {
@@ -122,15 +141,11 @@ void Item::setImbuement(uint8_t slot, uint16_t imbuementId, uint32_t duration) {
 	setCustomAttribute(std::to_string(ITEM_IMBUEMENT_SLOT + slot), valueDuration);
 }
 
-bool Item::addImbuement(uint8_t slot, uint16_t imbuementId, uint32_t duration) {
-	const auto &player = getHoldingPlayer();
-	if (!player) {
-		return false;
-	}
-
-	// Get imbuement by the id
-	const Imbuement* imbuement = g_imbuements().getImbuement(imbuementId);
-	if (!imbuement) {
+bool Item::canAddImbuement(uint8_t slot, const std::shared_ptr<Player> &player, const Imbuement* imbuement) {
+	auto itemSlots = getImbuementSlot();
+	if (itemSlots == 0 || slot >= itemSlots) {
+		g_logger().error("[Player::onApplyImbuement] - Player {} attempted to apply imbuement in an invalid slot ({})", player->getName(), slot);
+		player->sendImbuementResult("Invalid slot selection.");
 		return false;
 	}
 
@@ -146,8 +161,6 @@ bool Item::addImbuement(uint8_t slot, uint16_t imbuementId, uint32_t duration) {
 		player->sendImbuementResult("An error ocurred, please reopen imbuement window.");
 		return false;
 	}
-
-	setImbuement(slot, imbuementId, duration);
 
 	return true;
 }
@@ -511,8 +524,8 @@ std::shared_ptr<Player> Item::getHoldingPlayer() {
 	return nullptr;
 }
 
-bool Item::isItemStorable() const {
-	if (isStoreItem() || hasOwner()) {
+bool Item::isItemStorable() {
+	if (isStoreItem() || hasOwner() || canDecay()) {
 		return false;
 	}
 	const auto isContainerAndHasSomethingInside = (getContainer() != nullptr) && (!getContainer()->getItemList().empty());
@@ -3533,4 +3546,22 @@ int32_t ItemProperties::getDuration() const {
 	} else {
 		return getAttribute<int32_t>(ItemAttribute_t::DURATION);
 	}
+}
+
+void ItemProperties::setShader(const std::string &shaderName) {
+	if (shaderName.empty()) {
+		removeCustomAttribute("shader");
+		return;
+	}
+
+	setCustomAttribute("shader", shaderName);
+}
+
+bool ItemProperties::hasShader() const {
+	return getCustomAttribute("shader") != nullptr;
+}
+
+std::string ItemProperties::getShader() const {
+	const CustomAttribute* shader = getCustomAttribute("shader");
+	return shader ? shader->getString() : "";
 }
