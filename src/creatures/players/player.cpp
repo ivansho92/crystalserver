@@ -78,6 +78,7 @@
 #include "creatures/players/wheel/wheel_definitions.hpp"
 #include "creatures/players/proficiencies/proficiencies.hpp"
 #include "creatures/players/proficiencies/proficiencies_definitions.hpp"
+#include "utils/tools.hpp"
 
 MuteCountMap Player::muteCountMap;
 
@@ -3108,12 +3109,12 @@ void Player::setEditHouse(const std::shared_ptr<House> &house, uint32_t listId) 
 
 void Player::learnInstantSpell(const std::string &spellName) {
 	if (!hasLearnedInstantSpell(spellName)) {
-		learnedInstantSpellList.emplace_back(spellName);
+		learnedInstantSpellList.emplace(asLowerCaseString(spellName));
 	}
 }
 
 void Player::forgetInstantSpell(const std::string &spellName) {
-	std::erase(learnedInstantSpellList, spellName);
+	learnedInstantSpellList.erase(asLowerCaseString(spellName));
 }
 
 bool Player::hasLearnedInstantSpell(const std::string &spellName) const {
@@ -3125,9 +3126,11 @@ bool Player::hasLearnedInstantSpell(const std::string &spellName) const {
 		return true;
 	}
 
-	return std::ranges::any_of(learnedInstantSpellList, [&](const auto &learnedSpellName) {
-		return strcasecmp(learnedSpellName.c_str(), spellName.c_str()) == 0;
-	});
+	auto it = learnedInstantSpellList.find(asLowerCaseString(spellName));
+	if (it != learnedInstantSpellList.end()) {
+		return true;
+	}
+	return false;
 }
 
 void Player::updateRegeneration() const {
@@ -3367,6 +3370,26 @@ void Player::setNextAction(int64_t time) {
 
 bool Player::canDoAction() const {
 	return nextAction <= OTSYS_TIME();
+}
+
+void Player::setNextNecklaceAction(int64_t time) {
+	if (time > nextNecklaceAction) {
+		nextNecklaceAction = time;
+	}
+}
+
+void Player::setNextRingAction(int64_t time) {
+	if (time > nextRingAction) {
+		nextRingAction = time;
+	}
+}
+
+bool Player::canEquipNecklace() const {
+	return OTSYS_TIME() >= nextNecklaceAction;
+}
+
+bool Player::canEquipRing() const {
+	return OTSYS_TIME() >= nextRingAction;
 }
 
 void Player::setNextPotionAction(int64_t time) {
@@ -4164,16 +4187,28 @@ void Player::death(const std::shared_ptr<Creature> &lastHitCreature) {
 			bool hasSkull = (playerSkull == Skulls_t::SKULL_RED || playerSkull == Skulls_t::SKULL_BLACK);
 			uint8_t maxBlessing = 8;
 			if (!hasSkull && pvpDeath && hasBlessing(1)) {
-				removeBlessing(1, 1); // Remove TOF only
+				auto storeCount = getBlessingCount(1, true);
+				if (storeCount > 0) {
+					auto currentStore = kv()->scoped("summary")->scoped("blessings")->scoped(fmt::format("{}", 1))->get("amount");
+					if (currentStore) {
+						auto newAmount = std::max(0, static_cast<int>(currentStore->getNumber()) - 1);
+						kv()->scoped("summary")->scoped("blessings")->scoped(fmt::format("{}", 1))->set("amount", newAmount);
+					}
+				} else {
+					removeBlessing(1, 1);
+				}
 			} else {
 				for (int i = 2; i <= maxBlessing; i++) {
-					removeBlessing(i, 1);
-				}
-
-				const auto &playerAmulet = getThing(CONST_SLOT_NECKLACE);
-				bool usingAol = (playerAmulet && playerAmulet->getItem()->getID() == ITEM_AMULETOFLOSS);
-				if (usingAol) {
-					removeItemOfType(ITEM_AMULETOFLOSS, 1, -1);
+					auto storeCount = getBlessingCount(i, true);
+					if (storeCount > 0) {
+						auto currentStore = kv()->scoped("summary")->scoped("blessings")->scoped(fmt::format("{}", i))->get("amount");
+						if (currentStore) {
+							auto newAmount = std::max(0, static_cast<int>(currentStore->getNumber()) - 1);
+							kv()->scoped("summary")->scoped("blessings")->scoped(fmt::format("{}", i))->set("amount", newAmount);
+						}
+					} else {
+						removeBlessing(i, 1);
+					}
 				}
 			}
 		}
@@ -5248,30 +5283,14 @@ uint32_t Player::getItemTypeCount(uint16_t itemId, int32_t subType /*= -1*/) con
 }
 
 void Player::stashContainer(const StashContainerList &itemDict) {
-	StashItemList stashItemDict; // ItemID - Count
-	for (const auto &[item, itemCount] : itemDict) {
-		if (!item) {
-			continue;
-		}
-
-		stashItemDict[item->getID()] = itemCount;
-	}
-
-	for (const auto &[itemId, itemCount] : stashItems) {
-		if (!stashItemDict[itemId]) {
-			stashItemDict[itemId] = itemCount;
-		} else {
-			stashItemDict[itemId] += itemCount;
-		}
-	}
-
 	uint32_t totalStowed = 0;
-	std::ostringstream retString;
 	uint16_t refreshDepotSearchOnItem = 0;
+
 	for (const auto &[item, itemCount] : itemDict) {
 		if (!item) {
 			continue;
 		}
+
 		const uint16_t iteratorCID = item->getID();
 		if (g_game().internalRemoveItem(item, itemCount) == RETURNVALUE_NOERROR) {
 			addItemOnStash(iteratorCID, itemCount);
@@ -5287,12 +5306,12 @@ void Player::stashContainer(const StashContainerList &itemDict) {
 		return;
 	}
 
-	retString << "Stowed " << totalStowed << " object" << (totalStowed > 1 ? "s." : ".");
+	std::string message = fmt::format("Stowed {} object{}.", totalStowed, totalStowed > 1 ? "s" : "");
 	if (moved) {
-		retString << " Moved " << movedItems << " object" << (movedItems > 1 ? "s." : ".");
+		message += fmt::format(" Moved {} object{}.", movedItems, movedItems > 1 ? "s" : "");
 		movedItems = 0;
 	}
-	sendTextMessage(MESSAGE_STATUS, retString.str());
+	sendTextMessage(MESSAGE_STATUS, message);
 
 	// Refresh depot search window if necessary
 	if (refreshDepotSearchOnItem != 0) {
@@ -5366,14 +5385,11 @@ bool Player::hasItemCountById(uint16_t itemId, uint32_t itemAmount, bool checkSt
 	}
 
 	// Check items from stash
-	for (StashItemList stashToSend = getStashItems();
-	     const auto &[stashItemId, itemCount] : stashToSend) {
-		if (!checkStash) {
-			break;
-		}
-
-		if (stashItemId == itemId) {
-			newCount += itemCount;
+	if (checkStash) {
+		for (const auto &[stashItemId, itemCount] : getStashItems()) {
+			if (stashItemId == itemId) {
+				newCount += itemCount;
+			}
 		}
 	}
 
@@ -5413,17 +5429,11 @@ bool Player::removeItemCountById(uint16_t itemId, uint32_t itemAmount, bool remo
 }
 
 void Player::addItemOnStash(uint16_t itemId, uint32_t amount) {
-	const auto it = stashItems.find(itemId);
-	if (it != stashItems.end()) {
-		stashItems[itemId] += amount;
-		return;
-	}
-
-	stashItems[itemId] = amount;
+	stashItems[itemId] += amount;
 }
 
 uint32_t Player::getStashItemCount(uint16_t itemId) const {
-	const auto it = stashItems.find(itemId);
+	auto it = stashItems.find(itemId);
 	if (it != stashItems.end()) {
 		return it->second;
 	}
@@ -5431,21 +5441,22 @@ uint32_t Player::getStashItemCount(uint16_t itemId) const {
 }
 
 bool Player::withdrawItem(uint16_t itemId, uint32_t amount) {
-	const auto it = stashItems.find(itemId);
+	auto it = stashItems.find(itemId);
 	if (it != stashItems.end()) {
 		if (it->second > amount) {
-			stashItems[itemId] -= amount;
-		} else if (it->second == amount) {
-			stashItems.erase(itemId);
-		} else {
-			return false;
+			it->second -= amount;
+			return true;
 		}
-		return true;
+
+		if (it->second == amount) {
+			stashItems.erase(it);
+			return true;
+		}
 	}
 	return false;
 }
 
-StashItemList Player::getStashItems() const {
+const StashItemList &Player::getStashItems() const {
 	return stashItems;
 }
 
@@ -6856,7 +6867,11 @@ void Player::setSpecialMenuAvailable(bool stashBool, bool marketMenuBool, bool d
 	// Menu option 'show in market'
 	// Menu option to open depot search
 	stashMenuAvailable = stashBool;
-	marketMenu = marketMenuBool;
+	if (g_configManager().getBoolean(ENABLE_MARKET)) {
+		marketMenu = marketMenuBool;
+	} else {
+		marketMenu = false;
+	}
 	depotSearch = depotSearchBool;
 	if (client) {
 		client->sendSpecialContainersAvailable();
@@ -7256,8 +7271,6 @@ bool Player::isPromoted() const {
 
 uint32_t Player::getAttackSpeed() const {
 	int32_t modifiers = 0;
-	bool onFistAttackSpeed = g_configManager().getBoolean(TOGGLE_ATTACK_SPEED_ONFIST);
-	uint32_t MAX_ATTACK_SPEED = g_configManager().getNumber(MAX_SPEED_ATTACKONFIST);
 
 	if (mountAttributes) {
 		const auto &mount = g_game().mounts->getMountByClientID(defaultOutfit.lookMount);
@@ -7285,20 +7298,8 @@ uint32_t Player::getAttackSpeed() const {
 		}
 	}
 
-	if (onFistAttackSpeed) {
-		uint32_t baseAttackSpeed = vocation->getAttackSpeed();
-		uint32_t skillLevel = getSkillLevel(SKILL_FIST);
-		uint32_t attackSpeed = baseAttackSpeed - (skillLevel * g_configManager().getNumber(MULTIPLIER_ATTACKONFIST)) - modifiers;
-
-		if (attackSpeed < MAX_ATTACK_SPEED) {
-			attackSpeed = MAX_ATTACK_SPEED;
-		}
-
-		return attackSpeed;
-	} else {
-		uint32_t attackSpeed = vocation->getAttackSpeed() - modifiers;
-		return attackSpeed;
-	}
+	uint32_t attackSpeed = vocation->getAttackSpeed() - modifiers;
+	return attackSpeed;
 }
 
 double Player::getLostPercent() const {
@@ -8345,9 +8346,9 @@ void Player::sendAddMarker(const Position &pos, uint8_t markType, const std::str
 	}
 }
 
-void Player::sendItemInspection(uint16_t itemId, uint8_t itemCount, const std::shared_ptr<Item> &item, bool cyclopedia) const {
+void Player::sendItemInspection(uint16_t itemId, uint8_t itemCount, const std::shared_ptr<Item> &item, uint8_t inspectionType) const {
 	if (client) {
-		client->sendItemInspection(itemId, itemCount, item, cyclopedia);
+		client->sendItemInspection(itemId, itemCount, item, inspectionType);
 	}
 }
 
@@ -8969,6 +8970,12 @@ void Player::sendContainer(uint8_t cid, const std::shared_ptr<Container> &contai
 	}
 }
 
+void Player::sendExivaRestrictions() {
+	if (client) {
+		client->sendExivaRestrictions();
+	}
+}
+
 // inventory
 void Player::sendDepotItems(const ItemsTierCountList &itemMap, uint16_t count) const {
 	if (client) {
@@ -9100,13 +9107,19 @@ ReturnValue Player::addItemFromStash(uint16_t itemId, uint32_t itemCount) {
 			containersCache.emplace_back(obtainContainer);
 		}
 
-		for (const auto &item : obtainContainer->getItems(true)) {
-			const auto &subContainer = item->getContainer();
-			if (subContainer && subContainer->capacity() > subContainer->size()) {
-				containersCache.emplace_back(subContainer);
+		for (ContainerIterator it = obtainContainer->iterator(); it.hasNext(); it.advance()) {
+			const auto &item = *it;
+			if (!item) {
+				continue;
 			}
 
-			if (item && item->getID() == itemId && item->isStackable()) {
+			if (const auto &subContainer = item->getContainer()) {
+				if (subContainer->capacity() > subContainer->size()) {
+					containersCache.emplace_back(subContainer);
+				}
+			}
+
+			if (item->getID() == itemId && item->isStackable()) {
 				uint32_t availableSpace = item->getStackSize() - item->getItemCount();
 				if (availableSpace > 0) {
 					stackableItemsCache.emplace_back(item);
@@ -9382,7 +9395,9 @@ uint32_t sendStowItems(const std::shared_ptr<Item> &item, const std::shared_ptr<
 	}
 
 	if (const auto &container = stowItem->getContainer()) {
-		for (const auto &[stowableItem, stowableCount] : container->getStowableItems()) {
+		StashContainerList containerItems;
+		container->getStowableItems(containerItems);
+		for (const auto &[stowableItem, stowableCount] : containerItems) {
 			if (totalItemsToStow + itemsAdded >= maxItemsToStow) {
 				break;
 			}
@@ -9454,7 +9469,9 @@ void Player::stowItem(const std::shared_ptr<Item> &item, uint32_t count, bool al
 			}
 		}
 	} else if (const auto &container = item->getContainer()) {
-		for (const auto &[stowableItem, stowableCount] : container->getStowableItems()) {
+		StashContainerList containerItems;
+		container->getStowableItems(containerItems);
+		for (const auto &[stowableItem, stowableCount] : containerItems) {
 			if (totalItemsToStow >= maxItemsToStow) {
 				break;
 			}
@@ -10034,8 +10051,7 @@ std::pair<std::vector<std::shared_ptr<Item>>, std::map<uint16_t, std::map<uint8_
 		}
 	}
 
-	StashItemList stashToSend = getStashItems();
-	for (const auto &[itemId, itemCount] : stashToSend) {
+	for (const auto &[itemId, itemCount] : getStashItems()) {
 		const ItemType &itemType = Item::items[itemId];
 		if (itemType.wareId != 0) {
 			lockerItems[itemType.wareId][0] += itemCount;
@@ -10097,13 +10113,14 @@ bool Player::saySpell(SpeakClasses type, const std::string &text, bool isGhostMo
 	}
 
 	// Send to client
+	bool emoteSpellsEnabled = g_configManager().getBoolean(EMOTE_SPELLS);
 	for (const auto &spectator : spectators) {
 		if (const auto &tmpPlayer = spectator->getPlayer()) {
 			if (!isGhostMode || tmpPlayer->canSeeCreature(static_self_cast<Player>())) {
-				if (g_configManager().getBoolean(EMOTE_SPELLS)) {
+				if (emoteSpellsEnabled) {
 					tmpPlayer->sendCreatureSay(static_self_cast<Player>(), TALKTYPE_MONSTER_SAY, text, pos);
 				} else {
-					tmpPlayer->sendCreatureSay(static_self_cast<Player>(), TALKTYPE_SPELL_USE, text, pos);
+					tmpPlayer->sendCreatureSay(static_self_cast<Player>(), TALKTYPE_SAY, text, pos);
 				}
 			}
 		}
@@ -11555,11 +11572,11 @@ bool Player::setAccount(uint32_t accountId) {
 	}
 
 	account = std::make_shared<Account>(accountId);
-	return AccountErrors_t::Ok == account->load();
+	return AccountErrors_t::Ok == enumFromValue<AccountErrors_t>(account->load());
 }
 
 uint8_t Player::getAccountType() const {
-	return account ? account->getAccountType() : AccountType::ACCOUNT_TYPE_NORMAL;
+	return account ? account->getAccountType() : static_cast<uint8_t>(AccountType::ACCOUNT_TYPE_NORMAL);
 }
 
 uint32_t Player::getAccountId() const {
@@ -12178,6 +12195,26 @@ void Player::setSereneCooldown(const uint64_t addTime) {
 	m_serene_cooldown = timenow + addTime;
 }
 
+void Player::resyncSpellCooldowns() const {
+	if (!client) {
+		return;
+	}
+
+	// Resync individual spell cooldowns
+	for (const auto &condition : getConditionsByType(CONDITION_SPELLCOOLDOWN)) {
+		uint16_t spellId = condition->getSubId();
+		uint32_t ticks = condition->getTicks();
+		sendSpellCooldown(spellId, ticks);
+	}
+
+	// Resync group spell cooldowns
+	for (const auto &condition : getConditionsByType(CONDITION_SPELLGROUPCOOLDOWN)) {
+		SpellGroup_t groupId = static_cast<SpellGroup_t>(condition->getSubId());
+		uint32_t ticks = condition->getTicks();
+		client->sendSpellGroupCooldown(groupId, ticks);
+	}
+}
+
 void Player::sendVirtueProtocol() const {
 	if (client && m_virtue != VIRTUE_NONE) {
 		client->sendVirtueProtocol(static_cast<uint8_t>(m_virtue));
@@ -12654,4 +12691,68 @@ void Player::removeEquippedWeaponProficiency(const uint16_t itemId) {
 
 	sendStats();
 	sendSkills();
+}
+
+bool Player::canExiva(const std::string &spellParam) const {
+	if (g_game().getWorldType() != WORLDTYPE_OPTIONAL && !g_configManager().getBoolean(EXIVA_RESTRICTIONS_ONLY_OPTIONAL_WORLDS)) {
+		return true;
+	}
+
+	const auto &targetPlayer = g_game().getPlayerByName(spellParam);
+	if (!targetPlayer) {
+		return false;
+	}
+
+	const auto &targetRestrictions = targetPlayer->getExivaRestrictions();
+
+	if (targetRestrictions.allowAll) {
+		return true;
+	}
+
+	if (targetRestrictions.allowOwnGuild) {
+		const auto &sourceGuild = getGuild();
+		const auto &targetGuild = targetPlayer->getGuild();
+		if (sourceGuild && targetGuild && sourceGuild->getId() == targetGuild->getId()) {
+			return true;
+		}
+	}
+
+	if (targetRestrictions.allowOwnParty) {
+		const auto &sourceParty = getParty();
+		const auto &targetParty = targetPlayer->getParty();
+		if (sourceParty && targetParty && sourceParty == targetParty) {
+			return true;
+		}
+	}
+
+	if (targetRestrictions.allowVipList && targetPlayer->vip() && targetPlayer->vip()->exists(getGUID())) {
+		return true;
+	}
+
+	if (targetRestrictions.allowGuildWhitelist) {
+		const auto &playerGuild = getGuild();
+		if (playerGuild) {
+			auto it = std::ranges::find(targetRestrictions.guildWhitelist, playerGuild->getId());
+			if (it != targetRestrictions.guildWhitelist.end()) {
+				return true;
+			}
+		}
+	}
+
+	if (targetRestrictions.allowPlayerWhitelist) {
+		auto it = std::ranges::find(targetRestrictions.playerWhitelist, getGUID());
+		if (it != targetRestrictions.playerWhitelist.end()) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
+Player::ExivaRestrictions &Player::getExivaRestrictions() {
+	return exivaRestrictions;
+}
+
+const Player::ExivaRestrictions &Player::getExivaRestrictions() const {
+	return exivaRestrictions;
 }

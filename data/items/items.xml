@@ -4344,65 +4344,38 @@
 		</attribute>
 	</item>
 	<item id="2131" article="a" name="fire field">
+		<attribute key="primarytype" value="fields" />
 		<attribute key="type" value="magicfield" />
-		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000" />
-			<attribute key="count" value="7" />
-			<attribute key="damage" value="20" />
-		</attribute>
+		<attribute key="field" value="fire" />
 		<attribute key="duration" value="120" />
 		<attribute key="decayTo" value="2132" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
 	</item>
 	<item id="2132" article="a" name="fire field">
+		<attribute key="primarytype" value="fields" />
 		<attribute key="type" value="magicfield" />
-		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000" />
-			<attribute key="count" value="7" />
-			<attribute key="damage" value="10" />
-		</attribute>
+		<attribute key="field" value="fire" />
 		<attribute key="duration" value="120" />
 		<attribute key="decayTo" value="2133" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
 	</item>
 	<item id="2133" article="a" name="fire field">
+		<attribute key="primarytype" value="fields" />
 		<attribute key="type" value="magicfield" />
 		<attribute key="field" value="fire" />
 		<attribute key="duration" value="120" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
 	</item>
 	<item id="2134" article="a" name="poison gas">
 		<attribute key="primarytype" value="fields" />
 		<attribute key="type" value="magicfield" />
-		<attribute key="field" value="poison">
-			<attribute key="ticks" value="5000" />
-			<attribute key="damage" value="100" />
-			<attribute key="start" value="5" />
-		</attribute>
+		<attribute key="field" value="poison"/>
 		<attribute key="duration" value="120" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
 	</item>
 	<item id="2135" article="an" name="energy field">
+		<attribute key="primarytype" value="fields" />
 		<attribute key="type" value="magicfield" />
-		<attribute key="field" value="energy">
-			<attribute key="ticks" value="10000" />
-			<attribute key="damage" value="25" />
-		</attribute>
 		<attribute key="duration" value="120" />
 		<attribute key="decayTo" value="0" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
 	</item>
 	<item id="2136" name="smoke">
 		<attribute key="primarytype" value="fields" />
@@ -7916,7 +7889,7 @@
 		<attribute key="charges" value="1" />
 		<attribute key="weight" value="210" />
 	</item>
-	<item id="3204" article="a" name="dead human" />
+	<item id="3204" name="your own dead body" />
 	<item id="3205" article="a" name="family brooch">
 		<attribute key="primarytype" value="quest items" />
 		<attribute key="description" value="You see the familyname Windtrouser engraved on this brooch" />
@@ -10808,7 +10781,6 @@
 	</item>
 	<item id="3454" article="a" name="broom">
 		<attribute key="primarytype" value="tools" />
-		<attribute key="description" value="Don't use it without flying license. Not suitable for minors." />
 		<attribute key="weight" value="1100" />
 	</item>
 	<item id="3455" article="a" name="hoe">
@@ -13974,14 +13946,7 @@
 		<attribute key="effect" value="bluebubble" />
 	</item>
 	<item fromid="4603" toid="4608" name="grass" />
-	<item fromid="4609" toid="4611" name="shallow water">
-		<attribute key="primarytype" value="natural tiles" />
-		<attribute key="description" value="You see the silvery movement of fish." />
-		<attribute key="fluidsource" value="water" />
-		<attribute key="type" value="trashholder" />
-		<attribute key="effect" value="bluebubble" />
-	</item>
-	<item id="4612" name="shallow water">
+	<item id="4609" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
 		<attribute key="fluidsource" value="water" />
 		<attribute key="type" value="trashholder" />
@@ -13989,7 +13954,7 @@
 		<attribute key="duration" value="1200" />
 		<attribute key="decayTo" value="4597" />
 	</item>
-	<item id="4613" name="shallow water">
+	<item id="4610" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
 		<attribute key="fluidsource" value="water" />
 		<attribute key="type" value="trashholder" />
@@ -13997,13 +13962,37 @@
 		<attribute key="duration" value="1200" />
 		<attribute key="decayTo" value="4598" />
 	</item>
-	<item id="4614" name="shallow water">
+	<item id="4611" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
 		<attribute key="fluidsource" value="water" />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
 		<attribute key="duration" value="1200" />
 		<attribute key="decayTo" value="4599" />
+	</item>
+	<item id="4612" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="4600" />
+	</item>
+	<item id="4613" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="4601" />
+	</item>
+		<item id="4614" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="4602" />
 	</item>
 	<item fromid="4621" toid="4632" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
@@ -14038,11 +14027,53 @@
 	</item>
 	<item fromid="4773" toid="4784" name="grass" />
 	<item fromid="4785" toid="4808" name="dirt" />
-	<item fromid="4809" toid="4814" name="shallow water">
+	<item id="4809" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
 		<attribute key="fluidsource" value="water" />
 		<attribute key="type" value="trashholder" />
 		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="629" />	
+	</item>
+	<item id="4810" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="630" />	
+	</item>
+	<item id="4811" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="631" />	
+	</item>
+	<item id="4812" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="632" />	
+	</item>
+	<item id="4813" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="633" />	
+	</item>
+	<item id="4814" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="634" />	
 	</item>
 	<item fromid="4815" toid="4816" article="a" name="mountain">
 		<attribute key="primarytype" value="rocks" />
@@ -42239,10 +42270,25 @@
 		<attribute key="description" value="This printout is nearly unreadable. One column of numbers on it is followed by the word: Doubleday" />
 		<attribute key="weight" value="50" />
 	</item>
-	<item fromid="21302" toid="21322" name="shallow water">
+	<item fromid="21302" toid="21313" name="shallow water">
 		<attribute key="primarytype" value="natural tiles" />
 		<attribute key="fluidsource" value="water" />
 		<attribute key="effect" value="bluebubble" />
+		<attribute key="type" value="trashholder" />
+	</item>
+	<item id="21314" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="type" value="trashholder" />
+		<attribute key="duration" value="1200" />
+		<attribute key="decayTo" value="21312" />
+	</item>	
+	<item fromid="21315" toid="21322" name="shallow water">
+		<attribute key="primarytype" value="natural tiles" />
+		<attribute key="fluidsource" value="water" />
+		<attribute key="effect" value="bluebubble" />
+		<attribute key="type" value="trashholder" />
 	</item>
 	<item id="21323" article="an" name="imported water pipe">
 		<attribute key="primarytype" value="utilities" />
@@ -42504,14 +42550,12 @@
 	</item>
 	<item id="21435" article="a" name="black knight doll">
 		<attribute key="primarytype" value="fansite items" />
-		<attribute key="description" value="Awarded by TibiaLatina.Fandom.com.
-My sad story is told by few living humans but many dead warriors" />
+		<attribute key="description" value="Awarded by TibiaLatina.Fandom.com. My sad story is told by few living humans but many dead warriors" />
 		<attribute key="weight" value="1800" />
 	</item>
 	<item id="21436" article="a" name="black knight doll">
 		<attribute key="primarytype" value="fansite items" />
-		<attribute key="description" value="Awarded by TibiaLatina.Fandom.com.
-My sad story is told by few living humans but many dead warriors" />
+		<attribute key="description" value="Awarded by TibiaLatina.Fandom.com. My sad story is told by few living humans but many dead warriors" />
 		<attribute key="duration" value="3" />
 		<attribute key="decayTo" value="21435" />
 		<attribute key="weight" value="1800" />
@@ -42617,26 +42661,10 @@ My sad story is told by few living humans but many dead warriors" />
 		<attribute key="decayTo" value="0" />
 	</item>
 	<item fromid="21458" toid="21461" name="RESERVED SPRITE" />
-	<item id="21462" article="a" name="fire field" />
-	<item id="21463" article="a" name="magic field" />
-	<item id="21464" article="a" name="flame of life">
-		<attribute key="showduration" value="1" />
-		<attribute key="duration" value="600" />
-		<attribute key="decayTo" value="7359" />
-	</item>
-	<item id="21465" article="a" name="fire field">
-		<attribute key="type" value="magicfield" />
-		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000" />
-			<attribute key="count" value="7" />
-			<attribute key="damage" value="10" />
-		</attribute>
-		<attribute key="duration" value="120" />
-		<attribute key="decayTo" value="2132" />
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
-	</item>
+	<item id="21462" article="a" name="red flame" />
+	<item id="21463" article="a" name="blue flame" />
+	<item id="21464" article="a" name="violet flame"/>
+	<item id="21465" article="a" name="yellow flame" />
 	<item id="21466" name="ewer with holy water">
 		<attribute key="description" value="The water in the ewer shimmers faintly. In the desert's heat it will evaporate soon, however" />
 		<attribute key="weight" value="1750" />
@@ -43365,8 +43393,7 @@ My sad story is told by few living humans but many dead warriors" />
 	<item id="21946" article="a" name="remains of amphora" />
 	<item fromid="21947" toid="21948" article="a" name="midnight panther doll">
 		<attribute key="primarytype" value="dolls and bears" />
-		<attribute key="description" value="It is said to be a symbol of perseverance and luck.
-Awarded by TibiaMagazine.com.ve" />
+		<attribute key="description" value="It is said to be a symbol of perseverance and luck. Awarded by TibiaMagazine.com.ve" />
 		<attribute key="weight" value="1700" />
 	</item>
 	<item id="21949" name="RESERVED SPRITE" />
@@ -44251,8 +44278,7 @@ Awarded by TibiaMagazine.com.ve" />
 		<attribute key="weight" value="1500" />
 	</item>
 	<item fromid="22153" toid="22154" name="dark wizard's crown">
-		<attribute key="description" value="It grants infinite power and knowledge to the one who wears it.
-Awarded by TibiaMisterios.com.br" />
+		<attribute key="description" value="It grants infinite power and knowledge to the one who wears it. Awarded by TibiaMisterios.com.br" />
 		<attribute key="weight" value="666" />
 	</item>
 	<item id="22155" name="RESERVED SPRITE" />
@@ -45722,18 +45748,14 @@ Awarded by TibiaMisterios.com.br" />
 	</item>
 	<item fromid="22886" toid="22888" name="RESERVED SPRITE" />
 	<item id="22889" article="a" name="shield of destiny">
-		<attribute key="description" value="Holding the divine intellect of Uman and the merciless
-destruction instinct of Zathroth, the eternal balance remains on the
-hands of its owner. Granted by TibiaRoyal.com" />
+		<attribute key="description" value="Holding the divine intellect of Uman and the merciless destruction instinct of Zathroth, the eternal balance remains on the hands of its owner. Granted by TibiaRoyal.com" />
 		<attribute key="weight" value="6800" />
 		<attribute key="script" value="moveevent">
 			<attribute key="slot" value="shield" />
 		</attribute>
 	</item>
 	<item id="22890" article="a" name="shield of destiny">
-		<attribute key="description" value="Holding the divine intellect of Uman and the merciless
-destruction instinct of Zathroth, the eternal balance remains on the
-hands of its owner. Granted by TibiaRoyal.com" />
+		<attribute key="description" value="Holding the divine intellect of Uman and the merciless destruction instinct of Zathroth, the eternal balance remains on the hands of its owner. Granted by TibiaRoyal.com" />
 		<attribute key="duration" value="3" />
 		<attribute key="decayTo" value="22889" />
 		<attribute key="weight" value="6800" />
@@ -57774,7 +57796,7 @@ hands of its owner. Granted by TibiaRoyal.com" />
 	<item fromid="31153" toid="31156" name="hanging Sun disk" />
 	<item id="31157" article="a" name="wall lamp" />
 	<item id="31158" article="a" name="lit wall lamp" />
-	<item id="31159" name="RESERVED SPRITE" />
+	<item id="31159" name="grass" />
 	<item id="31160" article="a" name="cleansed soul splinter">
 		<attribute key="primarytype" value="quest objects" />
 	</item>
@@ -61239,6 +61261,10 @@ hands of its owner. Granted by TibiaRoyal.com" />
 		<attribute key="rotateTo" value="32509" />
 		<attribute key="wrapableTo" value="23398" />
 	</item>
+	<item fromid="32537" toid="32538" article="a" name="luminescent crystal">
+		<attribute key="primarytype" value="quest items" />
+		<attribute key="weight" value="25" />
+	</item>
 	<item id="32541" article="a" name="green headboard">
 		<attribute key="primarytype" value="furniture" />
 		<attribute key="type" value="bed" />
@@ -61521,10 +61547,6 @@ hands of its owner. Granted by TibiaRoyal.com" />
 		<attribute key="femaletransformto" value="32508" />
 		<attribute key="rotateTo" value="32535" />
 		<attribute key="wrapableTo" value="23398" />
-	</item>
-	<item fromid="32537" toid="32538" article="a" name="luminescent crystal">
-		<attribute key="primarytype" value="quest items" />
-		<attribute key="weight" value="25" />
 	</item>
 	<item id="32567" article="a" name="luminescent crystal">
 		<attribute key="primarytype" value="quest items" />
@@ -65423,14 +65445,12 @@ hands of its owner. Granted by TibiaRoyal.com" />
 	</item>
 	<item id="34326" name="wicked witch">
 		<attribute key="primarytype" value="fansite items" />
-		<attribute key="description" value="She was one of Ferumbras'
-former students at the Noodles Academy. Awarded by TibiaLabs.com" />
+		<attribute key="description" value="She was one of Ferumbras' former students at the Noodles Academy. Awarded by TibiaLabs.com" />
 		<attribute key="weight" value="1989" />
 	</item>
 	<item id="34327" name="wicked witch">
 		<attribute key="primarytype" value="fansite items" />
-		<attribute key="description" value="She was one of Ferumbras'
-former students at the Noodles Academy. Awarded by TibiaLabs.com" />
+		<attribute key="description" value="She was one of Ferumbras' former students at the Noodles Academy. Awarded by TibiaLabs.com" />
 		<attribute key="weight" value="1989" />
 		<attribute key="duration" value="4" />
 		<attribute key="decayTo" value="34326" />
@@ -68916,25 +68936,21 @@ former students at the Noodles Academy. Awarded by TibiaLabs.com" />
 		<attribute key="wrapableto" value="23398" />
 	</item>
 	<item id="36996" article="a" name="Luna">
-		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen.
-Granted by TibiaGoals.com" />
+		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen. Granted by TibiaGoals.com" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="36997" article="a" name="Luna">
-		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen.
-Granted by TibiaGoals.com" />
+		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen. Granted by TibiaGoals.com" />
 		<attribute key="weight" value="200" />
 		<attribute key="duration" value="4" />
 		<attribute key="decayto" value="36998" />
 	</item>
 	<item id="36998" article="a" name="Luna">
-		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen.
-Granted by TibiaGoals.com" />
+		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen. Granted by TibiaGoals.com" />
 		<attribute key="weight" value="200" />
 	</item>
 	<item id="36999" article="a" name="Luna">
-		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen.
-Granted by TibiaGoals.com" />
+		<attribute key="description" value="Gently shrouded in clouds, her dreams are about to come true. As she awakens something magical is about to happen. Granted by TibiaGoals.com" />
 		<attribute key="weight" value="200" />
 		<attribute key="duration" value="1" />
 		<attribute key="decayto" value="36996" />
@@ -74963,37 +74979,6 @@ Granted by TibiaGoals.com" />
 	<item id="42745" article="a" name="open door">
 		<attribute key="type" value="door" />
 	</item>
-	<item id="43297" article="a" name="agony field">
-		<attribute key="type" value="magicfield" />
-		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="248" />
-		<attribute key="field" value="agony">
-			<attribute key="ticks" value="5000" />
-			<attribute key="start" value="260" />
-			<attribute key="damage" value="100" />
-		</attribute>
-		<attribute key="script" value="moveevent">
-			<attribute key="eventType" value="stepin" />
-		</attribute>
-	</item>
-	<item id="43952" article="a" name="closed door">
-		<attribute key="type" value="door" />
-		<attribute key="blockProjectile" value="1" />
-		<attribute key="transformOnUse" value="43954" />
-	</item>
-	<item id="43953" article="a" name="closed door">
-		<attribute key="type" value="door" />
-		<attribute key="blockProjectile" value="1" />
-		<attribute key="transformOnUse" value="43955" />
-	</item>
-	<item id="43954" article="a" name="open door">
-		<attribute key="type" value="door" />
-		<attribute key="transformOnUse" value="43952" />
-	</item>
-	<item id="43955" article="a" name="open door">
-		<attribute key="type" value="door" />
-		<attribute key="transformOnUse" value="43953" />
-	</item>
 	<item id="42964" name="stairs" />
 	<item id="42965" name="stairs">
 		<attribute key="floorchange" value="north" />
@@ -75021,6 +75006,30 @@ Granted by TibiaGoals.com" />
 	<item id="43133" name="stairs" />
 	<item id="43134" name="stairs">
 		<attribute key="floorchange" value="south" />
+	</item>
+	<item fromid="43786" toid="43790" name="spore reservoir"/>
+	<item id="43294" article="a" name="spore tracks" >
+		<attribute key="primarytype" value="magicfield"/>
+		<attribute key="duration" value="3"/>
+		<attribute key="decayTo" value="43295"/>
+	</item>
+	<item id="43295" article="a" name="volatile funghi" >
+		<attribute key="primarytype" value="magicfield"/>
+		<attribute key="duration" value="3"/>
+		<attribute key="decayTo" value="0"/>
+	</item>
+	<item id="43297" article="a" name="agony field">
+		<attribute key="type" value="magicfield" />
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="248" />
+		<attribute key="field" value="agony">
+			<attribute key="ticks" value="5000" />
+			<attribute key="start" value="260" />
+			<attribute key="damage" value="100" />
+		</attribute>
+		<attribute key="script" value="moveevent">
+			<attribute key="eventType" value="stepin" />
+		</attribute>
 	</item>
 	<item id="43372" name="hole">
 		<attribute key="floorchange" value="down" />
@@ -75610,7 +75619,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75641,7 +75650,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 			<attribute key="intense wound cleansing" value="cooldown">
 				<attribute key="value" value="120000" />
@@ -75674,7 +75683,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75704,7 +75713,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75734,7 +75743,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75764,7 +75773,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75792,7 +75801,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75819,7 +75828,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75846,7 +75855,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75873,7 +75882,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75900,7 +75909,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75927,7 +75936,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="fierce berserk" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -75980,7 +75989,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="divine caldera" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76010,7 +76019,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="divine caldera" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76040,7 +76049,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="divine caldera" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76070,7 +76079,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="divine caldera" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76123,10 +76132,10 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="hell's core" value="base">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 			<attribute key="energy wave" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76155,16 +76164,16 @@ Granted by TibiaGoals.com" />
 		<attribute key="criticalhitdamage" value="500" />
 		<attribute key="weight" value="2100" />
 		<attribute key="imbuementslot" value="2">
-			<attribute key="mana leech" value="3" />
-			<attribute key="critical hit" value="3" />
-			<attribute key="skillboost magic level" value="3" />
+			<attribute key="mana leech" value="300" />
+			<attribute key="critical hit" value="300" />
+			<attribute key="skillboost magic level" value="300" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="hell's core" value="base">
-				<attribute key="value" value="6" />
+				<attribute key="value" value="600" />
 			</attribute>
 			<attribute key="energy wave" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76229,10 +76238,10 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="eternal winter" value="base">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 			<attribute key="terra wave" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76267,10 +76276,10 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="eternal winter" value="base">
-				<attribute key="value" value="6" />
+				<attribute key="value" value="600" />
 			</attribute>
 			<attribute key="terra wave" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -76322,6 +76331,17 @@ Granted by TibiaGoals.com" />
 		<attribute key="primarytype" value="valuables" />
 		<attribute key="weight" value="20" />
 	</item>
+	<item id="43899" article="a" name="cursed wood">
+		<attribute key="description" value="A piece of wood imbued with a vile presence." />
+		<attribute key="primarytype" value="quest items" />
+	</item>
+	<item id="43900" article="a" name="darklight geode">
+		<attribute key="description" value="A geode pulsating with darklight energy." />
+		<attribute key="primarytype" value="quest items" />
+	</item>
+	<item id="43901" article="a" name="toy ball">
+		<attribute key="weight" value="150" />
+	</item>
 	<item id="43902" article="a" name="crack">
 		<attribute key="description" value="You see to be able to fit through there" />
 	</item>
@@ -76336,6 +76356,24 @@ Granted by TibiaGoals.com" />
 	<item id="43917" article="a" name="werepanther trophy">
 		<attribute key="primarytype" value="trophies" />
 		<attribute key="weight" value="500" />
+	</item>
+	<item id="43952" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockProjectile" value="1" />
+		<attribute key="transformOnUse" value="43954" />
+	</item>
+	<item id="43953" article="a" name="closed door">
+		<attribute key="type" value="door" />
+		<attribute key="blockProjectile" value="1" />
+		<attribute key="transformOnUse" value="43955" />
+	</item>
+	<item id="43954" article="a" name="open door">
+		<attribute key="type" value="door" />
+		<attribute key="transformOnUse" value="43952" />
+	</item>
+	<item id="43955" article="a" name="open door">
+		<attribute key="type" value="door" />
+		<attribute key="transformOnUse" value="43953" />
 	</item>
 	<item id="44012" article="a" name="dead bakragore">
 		<attribute key="containerSize" value="8" />
@@ -76382,20 +76420,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="5" />
 	</item>
-	<item id="44024" article="a" name="dead chagorz">
-		<attribute key="containerSize" value="8" />
-		<attribute key="decayTo" value="44025" />
-		<attribute key="duration" value="5" />
-	</item>
-	<item id="44025" article="a" name="dead chagorz">
-		<attribute key="containerSize" value="8" />
-		<attribute key="decayTo" value="44026" />
-		<attribute key="duration" value="5" />
-	</item>
-	<item id="44026" article="a" name="dead chagorz">
-		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="5" />
-	</item>
 	<item id="44021" article="a" name="dead vemiath">
 		<attribute key="containerSize" value="8" />
 		<attribute key="decayTo" value="44022" />
@@ -76408,6 +76432,20 @@ Granted by TibiaGoals.com" />
 		<attribute key="duration" value="5" />
 	</item>
 	<item id="44023" article="a" name="dead vemiath">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="5" />
+	</item>
+	<item id="44024" article="a" name="dead chagorz">
+		<attribute key="containerSize" value="8" />
+		<attribute key="decayTo" value="44025" />
+		<attribute key="duration" value="5" />
+	</item>
+	<item id="44025" article="a" name="dead chagorz">
+		<attribute key="containerSize" value="8" />
+		<attribute key="decayTo" value="44026" />
+		<attribute key="duration" value="5" />
+	</item>
+	<item id="44026" article="a" name="dead chagorz">
 		<attribute key="decayTo" value="0" />
 		<attribute key="duration" value="5" />
 	</item>
@@ -76459,10 +76497,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="1000" />
 	</item>
 	<item id="44158" article="a" name="dragon trophy" />
-	<item id="49150" article="a" name="dead rootthing">
-		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="5" />
-	</item>
 	<item id="44529" name="slits">
 		<attribute key="duration" value="10" />
 		<attribute key="decayTo" value="44530" />
@@ -76615,7 +76649,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="front sweep" value="life leech">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76643,7 +76677,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="strong ethereal spear" value="life leech">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76671,7 +76705,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="energy wave" value="life leech">
-				<attribute key="value" value="5" />
+				<attribute key="value" value="500" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76699,7 +76733,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="terra wave" value="life leech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76726,7 +76760,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="divine missile" value="base">
-				<attribute key="value" value="6" />
+				<attribute key="value" value="600" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76784,7 +76818,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="5100" />
 		<attribute key="augments" value="1">
 			<attribute key="intense wound cleansing" value="base">
-				<attribute key="value" value="50" />
+				<attribute key="value" value="5000" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -76801,10 +76835,10 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="3400" />
 		<attribute key="augments" value="1">
 			<attribute key="great energy beam" value="base">
-				<attribute key="value" value="7" />
+				<attribute key="value" value="700" />
 			</attribute>
 			<attribute key="great death beam" value="base">
-				<attribute key="value" value="7" />
+				<attribute key="value" value="700" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -77109,52 +77143,6 @@ Granted by TibiaGoals.com" />
 	<item id="45160" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
-	<item id="45641" article="a" name="candy necklace">
-		<attribute key="primarytype" value="amulets and necklaces" />
-		<attribute key="description" value="This necklace provides a sugary barrier against attacks." />
-		<attribute key="armor" value="2" />
-		<attribute key="showAttributes" value="1" />
-		<attribute key="absorbpercentphysical" value="3" />
-		<attribute key="absorbpercentenergy" value="6" />
-		<attribute key="absorbpercentearth" value="-5" />
-		<attribute key="weight" value="510" />
-		<attribute key="script" value="moveevent">
-			<attribute key="level" value="220" />
-			<attribute key="slot" value="necklace" />
-		</attribute>
-	</item>
-	<item id="45643" article="a" name="biscuit barrier">
-		<attribute key="primarytype" value="shields" />
-		<attribute key="weaponType" value="shield" />
-		<attribute key="description" value="This tasty-looking shield protects from damage and boosts your regeneration." />
-		<attribute key="absorbpercentphysical" value="3" />
-		<attribute key="absorbpercentfire" value="5" />
-		<attribute key="lifeleechamount" value="200" />
-		<attribute key="manaticks" value="3000" />
-		<attribute key="managain" value="4" />
-		<attribute key="healthticks" value="3000" />
-		<attribute key="healthgain" value="1" />
-		<attribute key="skillshield" value="2" />
-		<attribute key="defense" value="36" />
-		<attribute key="weight" value="5200" />
-		<attribute key="imbuementslot" value="1">
-			<attribute key="elemental protection death" value="3" />
-			<attribute key="elemental protection earth" value="3" />
-			<attribute key="elemental protection ice" value="3" />
-			<attribute key="elemental protection energy" value="3" />
-			<attribute key="elemental protection holy" value="3" />
-		</attribute>
-		<attribute key="augments" value="1">
-			<attribute key="wound cleansing" value="base">
-				<attribute key="value" value="16" />
-			</attribute>
-		</attribute>
-		<attribute key="script" value="moveevent">
-			<attribute key="level" value="200" />
-			<attribute key="slot" value="shield" />
-			<attribute key="vocation" value="Knight;true, Elite Knight" />
-		</attribute>
-	</item>
 	<item id="45639" article="a" name="cocoa grimoire">
 		<attribute key="primarytype" value="spellbooks" />
 		<attribute key="weaponType" value="spellbook" />
@@ -77177,7 +77165,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="ultimate flame strike" value="base">
-				<attribute key="value" value="33" />
+				<attribute key="value" value="3300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -77208,13 +77196,27 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="ultimate ice strike" value="base">
-				<attribute key="value" value="33" />
+				<attribute key="value" value="3300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
 			<attribute key="level" value="200" />
 			<attribute key="slot" value="shield" />
 			<attribute key="vocation" value="Druid;true, Elder Druid" />
+		</attribute>
+	</item>
+	<item id="45641" article="a" name="candy necklace">
+		<attribute key="primarytype" value="amulets and necklaces" />
+		<attribute key="description" value="This necklace provides a sugary barrier against attacks." />
+		<attribute key="armor" value="2" />
+		<attribute key="showAttributes" value="1" />
+		<attribute key="absorbpercentphysical" value="3" />
+		<attribute key="absorbpercentenergy" value="6" />
+		<attribute key="absorbpercentearth" value="-5" />
+		<attribute key="weight" value="510" />
+		<attribute key="script" value="moveevent">
+			<attribute key="level" value="220" />
+			<attribute key="slot" value="necklace" />
 		</attribute>
 	</item>
 	<item id="45642" article="a" name="ring of temptation">
@@ -77228,6 +77230,38 @@ Granted by TibiaGoals.com" />
 		<attribute key="script" value="moveevent">
 			<attribute key="level" value="100" />
 			<attribute key="slot" value="ring" />
+		</attribute>
+	</item>
+	<item id="45643" article="a" name="biscuit barrier">
+		<attribute key="primarytype" value="shields" />
+		<attribute key="weaponType" value="shield" />
+		<attribute key="description" value="This tasty-looking shield protects from damage and boosts your regeneration." />
+		<attribute key="absorbpercentphysical" value="3" />
+		<attribute key="absorbpercentfire" value="5" />
+		<attribute key="lifeleechamount" value="200" />
+		<attribute key="manaticks" value="3000" />
+		<attribute key="managain" value="4" />
+		<attribute key="healthticks" value="3000" />
+		<attribute key="healthgain" value="1" />
+		<attribute key="skillshield" value="2" />
+		<attribute key="defense" value="36" />
+		<attribute key="weight" value="5200" />
+		<attribute key="imbuementslot" value="1">
+			<attribute key="elemental protection death" value="3" />
+			<attribute key="elemental protection earth" value="3" />
+			<attribute key="elemental protection ice" value="3" />
+			<attribute key="elemental protection energy" value="3" />
+			<attribute key="elemental protection holy" value="3" />
+		</attribute>
+		<attribute key="augments" value="1">
+			<attribute key="wound cleansing" value="base">
+				<attribute key="value" value="1650" />
+			</attribute>
+		</attribute>
+		<attribute key="script" value="moveevent">
+			<attribute key="level" value="200" />
+			<attribute key="slot" value="shield" />
+			<attribute key="vocation" value="Knight;true, Elite Knight" />
 		</attribute>
 	</item>
 	<item id="45644" article="a" name="candy-coated quiver">
@@ -80248,10 +80282,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="primarytype" value="food" />
 		<attribute key="weight" value="10" />
 	</item>
-	<item id="48257" article="a" name="dead nibblemaw">
-		<attribute key="decayTo" value="0" />
-		<attribute key="duration" value="5" />
-	</item>
 	<item id="48254" article="a" name="churro heart" plural="churro hearts">
 		<attribute key="loottype" value="creature products" />
 		<attribute key="primarytype" value="food" />
@@ -80266,6 +80296,10 @@ Granted by TibiaGoals.com" />
 		<attribute key="loottype" value="creature products" />
 		<attribute key="primarytype" value="food" />
 		<attribute key="weight" value="25" />
+	</item>
+	<item id="48257" article="a" name="dead nibblemaw">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="5" />
 	</item>
 	<item id="48258" article="a" name="dead nibblemaw">
 		<attribute key="containerSize" value="8" />
@@ -81304,6 +81338,14 @@ Granted by TibiaGoals.com" />
 		<attribute key="decayTo" value="49150" />
 		<attribute key="duration" value="5" />
 	</item>
+	<item id="49150" article="a" name="dead rootthing">
+		<attribute key="decayTo" value="0" />
+		<attribute key="duration" value="5" />
+	</item>
+	<item id="49161" article="a" name="trapdoor">
+		<attribute key="primarytype" value="dropdowns" />
+		<attribute key="floorchange" value="down" />
+	</item>
 	<item id="49163" article="an" name="ominous soul core">
 		<attribute key="primarytype" value="soul cores" />
 		<attribute key="description" value="Offers a soul to the Soulpit. Combine with an exalted core to turn it into a lesser soul core." />
@@ -81339,10 +81381,6 @@ Granted by TibiaGoals.com" />
 	</item>
 	<item id="49407" article="a" name="sacrificial altar">
 		<attribute key="primarytype" value="shrines and altars" />
-	</item>
-	<item id="49161" article="a" name="trapdoor">
-		<attribute key="primarytype" value="dropdowns" />
-		<attribute key="floorchange" value="down" />
 	</item>
 	<item id="49520" article="a" name="inferniarch bow">
 		<attribute key="primarytype" value="distance weapons" />
@@ -81595,7 +81633,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="2600" />
 		<attribute key="augments" value="1">
 			<attribute key="front sweep" value="ManaLeech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="imbuementslot" value="2">
@@ -81619,7 +81657,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="3600" />
 		<attribute key="augments" value="1">
 			<attribute key="strong ethereal spear" value="ManaLeech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="imbuementslot" value="2">
@@ -81641,7 +81679,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="1500" />
 		<attribute key="augments" value="1">
 			<attribute key="energy wave" value="ManaLeech">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="imbuementslot" value="2">
@@ -81664,7 +81702,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="1500" />
 		<attribute key="augments" value="1">
 			<attribute key="terra wave" value="ManaLeech">
-				<attribute key="value" value="2" />
+				<attribute key="value" value="200" />
 			</attribute>
 		</attribute>
 		<attribute key="imbuementslot" value="2">
@@ -81862,8 +81900,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="ammotype" value="arrow" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="criticalhitdamage" value="5800" />
-		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="skilldist" value="2" />
 		<attribute key="hitchance" value="5" />
 		<attribute key="range" value="6" />
@@ -81887,8 +81923,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="ammotype" value="arrow" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="skilldist" value="2" />
 		<attribute key="hitchance" value="5" />
 		<attribute key="range" value="6" />
@@ -81912,8 +81946,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="slotType" value="two-handed" />
 		<attribute key="ammotype" value="arrow" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="skilldist" value="2" />
 		<attribute key="hitchance" value="5" />
 		<attribute key="range" value="6" />
@@ -81942,8 +81974,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="range" value="6" />
 		<attribute key="attack" value="8" />
 		<attribute key="weight" value="5900" />
-		<attribute key="criticalhitdamage" value="5800" />
-		<attribute key="criticalhitchance" value="1000" />
 		<attribute key="imbuementslot" value="2">
 			<attribute key="life leech" value="3" />
 			<attribute key="mana leech" value="3" />
@@ -81967,8 +81997,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="range" value="6" />
 		<attribute key="attack" value="8" />
 		<attribute key="weight" value="5900" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="imbuementslot" value="2">
 			<attribute key="critical hit" value="3" />
 			<attribute key="mana leech" value="3" />
@@ -81992,8 +82020,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="range" value="6" />
 		<attribute key="attack" value="8" />
 		<attribute key="weight" value="5900" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="imbuementslot" value="2">
 			<attribute key="critical hit" value="3" />
 			<attribute key="life leech" value="3" />
@@ -82015,8 +82041,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="skillaxe" value="3" />
 		<attribute key="weight" value="6700" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82040,8 +82064,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="skillaxe" value="3" />
 		<attribute key="weight" value="6700" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82065,8 +82087,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="skillaxe" value="3" />
 		<attribute key="weight" value="6700" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
@@ -82090,8 +82110,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillaxe" value="4" />
 		<attribute key="weight" value="8500" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82115,8 +82133,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillaxe" value="4" />
 		<attribute key="weight" value="8500" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82140,9 +82156,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillaxe" value="4" />
 		<attribute key="weight" value="8500" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
-		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
 			<attribute key="critical hit" value="3" />
@@ -82164,8 +82177,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillclub" value="3" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="6500" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82188,8 +82199,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillclub" value="3" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="6500" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82212,8 +82221,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillclub" value="3" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="weight" value="6500" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
@@ -82236,8 +82243,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementice" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillclub" value="4" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82260,8 +82265,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementice" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillclub" value="4" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82284,8 +82287,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementice" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillclub" value="4" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
@@ -82308,8 +82309,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillsword" value="3" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82332,8 +82331,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillsword" value="3" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82356,8 +82353,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="defense" value="31" />
 		<attribute key="extradef" value="3" />
 		<attribute key="skillsword" value="3" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="weight" value="6400" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
@@ -82380,8 +82375,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementenergy" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillsword" value="4" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82404,8 +82397,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementenergy" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillsword" value="4" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="mana leech" value="3" />
@@ -82428,8 +82419,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="elementenergy" value="48" />
 		<attribute key="defense" value="33" />
 		<attribute key="skillsword" value="4" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="weight" value="8600" />
 		<attribute key="imbuementslot" value="1">
 			<attribute key="life leech" value="3" />
@@ -82451,8 +82440,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="firemagiclevelpoints" value="1" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2400" />
 		<attribute key="imbuementslot" value="1">
@@ -82479,8 +82466,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="firemagiclevelpoints" value="1" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2400" />
 		<attribute key="imbuementslot" value="1">
@@ -82507,8 +82492,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="firemagiclevelpoints" value="1" />
 		<attribute key="absorbpercentearth" value="5" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2400" />
 		<attribute key="imbuementslot" value="1">
@@ -82535,8 +82518,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="earthmagiclevelpoints" value="1" />
 		<attribute key="absorbpercentdeath" value="5" />
-		<attribute key="criticalhitchance" value="1000" />
-		<attribute key="criticalhitdamage" value="5800" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2200" />
 		<attribute key="imbuementslot" value="1">
@@ -82563,8 +82544,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="earthmagiclevelpoints" value="1" />
 		<attribute key="absorbpercentdeath" value="5" />
-		<attribute key="lifeleechchance" value="10000" />
-		<attribute key="lifeleechamount" value="2900" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2200" />
 		<attribute key="imbuementslot" value="1">
@@ -82591,8 +82570,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="magiclevelpoints" value="3" />
 		<attribute key="earthmagiclevelpoints" value="1" />
 		<attribute key="absorbpercentdeath" value="5" />
-		<attribute key="manaleechchance" value="10000" />
-		<attribute key="manaleechamount" value="1000" />
 		<attribute key="range" value="5" />
 		<attribute key="weight" value="2200" />
 		<attribute key="imbuementslot" value="1">
@@ -82677,11 +82654,11 @@ Granted by TibiaGoals.com" />
 	<item id="49943" article="a" name="ramp">
 		<attribute key="floorchange" value="south" />
 	</item>
-	<item fromid="49953" toid="49967" article="a" name="stone roof">
-		<attribute key="primarytype" value="walls" />
-	</item>
 	<item id="49948" article="an" name="guarded crystal sphere">
 		<attribute key="description" value="This sphere is guarded by the serene spirits of the Merudri" />
+	</item>
+	<item fromid="49953" toid="49967" article="a" name="stone roof">
+		<attribute key="primarytype" value="walls" />
 	</item>
 	<item fromid="49970" toid="49978" article="a" name="inferniarch god's head" />
 	<item id="49987" article="a" name="dead spellreaper inferniarch">
@@ -83188,7 +83165,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="sweeping takedown" value="base">
-				<attribute key="value" value="4" />
+				<attribute key="value" value="400" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -83218,7 +83195,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="sweeping takedown" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -83525,11 +83502,6 @@ Granted by TibiaGoals.com" />
 			<attribute key="critical hit" value="3" />
 			<attribute key="skillboost fist" value="3" />
 		</attribute>
-		<attribute key="augments" value="1">
-			<attribute key="mystic repulse" value="base">
-				<attribute key="value" value="14" />
-			</attribute>
-		</attribute>
 		<attribute key="script" value="moveevent;weapon">
 			<attribute key="level" value="135" />
 			<attribute key="unproperly" value="true" />
@@ -83680,7 +83652,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="flurry of blows" value="mana leech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -83991,7 +83963,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="spirit mend" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84019,6 +83991,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="description" value="The traditional robe of a Merudri monk" />
 		<attribute key="primarytype" value="armors" />
 		<attribute key="armor" value="7" />
+		<attribute key="mantra" value="7" />
 		<attribute key="skillfist" value="1" />
 		<attribute key="weight" value="7000" />
 		<attribute key="script" value="moveevent">
@@ -84113,7 +84086,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="flurry of blows" value="life leech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84156,7 +84129,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="flurry of blows" value="life leech">
-				<attribute key="value" value="3" />
+				<attribute key="value" value="300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84235,7 +84208,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="2100" />
 		<attribute key="augments" value="1">
 			<attribute key="double jab" value="base">
-				<attribute key="value" value="12" />
+				<attribute key="value" value="1200" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84284,7 +84257,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="greater tiger clash" value="base">
-				<attribute key="value" value="8" />
+				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent;weapon">
@@ -84310,11 +84283,6 @@ Granted by TibiaGoals.com" />
 			<attribute key="critical hit" value="3" />
 			<attribute key="skillboost fist" value="3" />
 		</attribute>
-		<attribute key="augments" value="1">
-			<attribute key="greater tiger clash" value="base">
-				<attribute key="value" value="16" />
-			</attribute>
-		</attribute>
 		<attribute key="script" value="moveevent;weapon">
 			<attribute key="level" value="100" />
 			<attribute key="unproperly" value="true" />
@@ -84339,7 +84307,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="greater tiger clash" value="base">
-				<attribute key="value" value="12" />
+				<attribute key="value" value="1200" />
 			</attribute>
 		</attribute>
 		<attribute key="weight" value="2900" />
@@ -84363,7 +84331,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="chained penance" value="base">
-				<attribute key="value" value="6" />
+				<attribute key="value" value="600" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84604,6 +84572,18 @@ Granted by TibiaGoals.com" />
 		<attribute key="primarytype" value="decoration" />
 		<attribute key="rotateto" value="50435" />
 		<attribute key="wrapableto" value="23398" />
+	</item>
+	<item id="50547" name="stairs">
+		<attribute key="floorchange" value="north" />
+	</item>
+	<item id="50551" name="stairs">
+		<attribute key="floorchange" value="west" />
+	</item>
+	<item id="50553" name="stairs">
+		<attribute key="floorchange" value="east" />
+	</item>
+	<item id="50555" name="stairs">
+		<attribute key="floorchange" value="south" />
 	</item>
 	<item id="51119" article="a" name="simple jo staff">
 		<attribute key="primarytype" value="fist weapons" />
@@ -84855,7 +84835,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="ethereal spear" value="base">
-				<attribute key="value" value="40" />
+				<attribute key="value" value="4000" />
 			</attribute>
 			<attribute key="ethereal spear" value="critical hit chance">
 				<attribute key="value" value="200" />
@@ -84881,7 +84861,7 @@ Granted by TibiaGoals.com" />
 		</attribute>
 		<attribute key="augments" value="1">
 			<attribute key="greater tiger clash" value="base">
-				<attribute key="value" value="33" />
+				<attribute key="value" value="3300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -84962,10 +84942,10 @@ Granted by TibiaGoals.com" />
 		<attribute key="absorbpercentdeath" value="4" />
 		<attribute key="weight" value="11500" />
 		<attribute key="augments" value="1">
-			<attribute key="etheral spear" value="base">
-				<attribute key="value" value="40" />
+			<attribute key="ethereal spear" value="base">
+				<attribute key="value" value="4000" />
 			</attribute>
-			<attribute key="etheral spear" value="critical extra damage">
+			<attribute key="ethereal spear" value="critical extra damage">
 				<attribute key="value" value="800" />
 			</attribute>
 		</attribute>
@@ -85036,7 +85016,7 @@ Granted by TibiaGoals.com" />
 		<attribute key="weight" value="11000" />
 		<attribute key="augments" value="1">
 			<attribute key="ultimate energy strike" value="base">
-				<attribute key="value" value="33" />
+				<attribute key="value" value="3300" />
 			</attribute>
 		</attribute>
 		<attribute key="script" value="moveevent">
@@ -85153,6 +85133,10 @@ Granted by TibiaGoals.com" />
 	<item id="51420" article="a" name="paper boat">
 		<attribute key="primarytype" value="creature products" />
 		<attribute key="weight" value="50" />
+	</item>
+	<item id="51421" article="a" name="colourful quill">
+		<attribute key="primarytype" value="creature products" />
+		<attribute key="weight" value="60" />
 	</item>
 	<item id="51422" article="a" name="star ink">
 		<attribute key="primarytype" value="creature products" />
@@ -85347,10 +85331,6 @@ Granted by TibiaGoals.com" />
 	<item id="51485" article="a" name="bone fibula">
 		<attribute key="primarytype" value="creature products" />
 		<attribute key="weight" value="20" />
-	</item>
-	<item id="51421" article="a" name="colourful quill">
-		<attribute key="primarytype" value="creature products" />
-		<attribute key="weight" value="60" />
 	</item>
 	<item id="51486" name="spiked gorget">
 		<attribute key="weight" value="20" />
@@ -85590,6 +85570,25 @@ Granted by TibiaGoals.com" />
 	<item id="51568" name="boat ticket">
 		<attribute key="weight" value="50" />
 	</item>
+	<item id="51569" article="a" name="slain vladrukh">
+		<attribute key="duration" value="60" />
+		<attribute key="decayTo" value="0" />
+	</item>
+	<item id="51570" article="a" name="slain vladrukh">
+		<attribute key="duration" value="60" />
+		<attribute key="decayTo" value="51569" />
+		<attribute key="containersize" value="24" />
+	</item>
+	<item id="51571" article="a" name="slain vladrukh">
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="51570" />
+		<attribute key="containersize" value="24" />
+	</item>
+	<item id="51572" article="a" name="slain vladrukh">
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="51571" />
+		<attribute key="containersize" value="24" />
+	</item>
 	<item id="51584" article="a" name="slain gloom maw">
 		<attribute key="duration" value="300" />
 		<attribute key="decayTo" value="51585" />
@@ -85609,44 +85608,6 @@ Granted by TibiaGoals.com" />
 		<attribute key="duration" value="60" />
 		<attribute key="decayTo" value="0" />
 	</item>
-	<item id="51595" article="a" name="slain vampiric essence">
-		<attribute key="duration" value="300" />
-		<attribute key="decayTo" value="51594" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51594" article="a" name="slain vampiric essence">
-		<attribute key="duration" value="300" />
-		<attribute key="decayTo" value="51593" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51593" article="a" name="slain vampiric essence">
-		<attribute key="duration" value="60" />
-		<attribute key="decayTo" value="51592" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51592" article="a" name="slain vampiric maessencew">
-		<attribute key="duration" value="60" />
-		<attribute key="decayTo" value="0" />
-	</item>
-	<item id="51572" article="a" name="slain vladrukh">
-		<attribute key="duration" value="300" />
-		<attribute key="decayTo" value="51571" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51571" article="a" name="slain vladrukh">
-		<attribute key="duration" value="300" />
-		<attribute key="decayTo" value="51570" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51570" article="a" name="slain vladrukh">
-		<attribute key="duration" value="60" />
-		<attribute key="decayTo" value="51569" />
-		<attribute key="containersize" value="24" />
-	</item>
-	<item id="51569" article="a" name="slain vladrukh">
-		<attribute key="duration" value="60" />
-		<attribute key="decayTo" value="0" />
-	</item>
 	<item id="51588" article="a" name="proficiency catalyst">
 		<attribute key="primarytype" value="valuables" />
 		<attribute key="weight" value="500" />
@@ -85654,6 +85615,25 @@ Granted by TibiaGoals.com" />
 	<item id="51589" article="a" name="greater proficiency catalyst">
 		<attribute key="primarytype" value="valuables" />
 		<attribute key="weight" value="750" />
+	</item>
+	<item id="51592" article="a" name="slain vampiric maessencew">
+		<attribute key="duration" value="60" />
+		<attribute key="decayTo" value="0" />
+	</item>
+	<item id="51593" article="a" name="slain vampiric essence">
+		<attribute key="duration" value="60" />
+		<attribute key="decayTo" value="51592" />
+		<attribute key="containersize" value="24" />
+	</item>
+	<item id="51594" article="a" name="slain vampiric essence">
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="51593" />
+		<attribute key="containersize" value="24" />
+	</item>
+	<item id="51595" article="a" name="slain vampiric essence">
+		<attribute key="duration" value="300" />
+		<attribute key="decayTo" value="51594" />
+		<attribute key="containersize" value="24" />
 	</item>
 	<item id="51623" name="deer fur brush">
 		<attribute key="weight" value="100" />
@@ -85856,17 +85836,5 @@ Granted by TibiaGoals.com" />
 	<item id="51747" article="a" name="intricate void scroll">
 		<attribute key="primarytype" value="documents and papers" />
 		<attribute key="weight" value="250" />
-	</item>
-	<item id="50547" name="stairs">
-		<attribute key="floorchange" value="north" />
-	</item>
-	<item id="50551" name="stairs">
-		<attribute key="floorchange" value="west" />
-	</item>
-	<item id="50553" name="stairs">
-		<attribute key="floorchange" value="east" />
-	</item>
-	<item id="50555" name="stairs">
-		<attribute key="floorchange" value="south" />
 	</item>
 </items>

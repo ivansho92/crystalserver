@@ -40,6 +40,7 @@
 #include "enums/player_wheel.hpp"
 #include "database/databasetasks.hpp"
 #include "game/scheduling/dispatcher.hpp"
+#include "game/scheduling/events_scheduler.hpp"
 #include "game/scheduling/save_manager.hpp"
 #include "game/zones/zone.hpp"
 #include "io/io_bosstiary.hpp"
@@ -331,52 +332,53 @@ Game::Game() {
 		Title(51, BESTIARY, static_cast<uint16_t>(BESTY_RACE_REPTILE), "Snake Charmer", "", "Unlocked all Reptile Bestiary entries."),
 		Title(52, BESTIARY, static_cast<uint16_t>(BESTY_RACE_GIANT), "Tumbler", "", "Unlocked all Giant Bestiary entries."),
 		Title(53, BESTIARY, static_cast<uint16_t>(BESTY_RACE_PLANT), "Weedkiller", "", "Unlocked all Plant Bestiary entries."),
-		Title(54, BESTIARY, 0, "Executioner", "", "Unlocked all Bestiary entries."),
+		Title(54, BESTIARY, static_cast<uint16_t>(BESTY_RACE_INKBORN), "Ink Eraser", "", "Unlocked all Inkborn Bestiary entries."),
+		Title(55, BESTIARY, 0, "Executioner", "", "Unlocked all Bestiary entries."),
 
-		Title(55, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Annihilator", "", "Unlocked all Nemesis bosses.", 0, false),
-		Title(56, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Destroyer", "", "Unlocked 10 or more Archfoe bosses.", 10, true),
-		Title(57, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Devastator", "", "Unlocked 10 or more Nemesis bosses.", 10, true),
-		Title(58, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Eraser", "", "Unlocked all Archfoe bosses.", 0, false),
-		Title(59, BOSSTIARY, 0, "Boss Executioner", "", "Unlocked all bosses.", 0, false),
-		Title(60, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Hunter", "", "Unlocked 10 or more Bane bosses.", 10, true),
-		Title(61, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Obliterator", "", "Unlocked 40 or more Nemesis bosses.", 40, true),
-		Title(62, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Slayer", "", "Unlocked all Bane bosses.", 0, false),
-		Title(63, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Smiter", "", "Unlocked 40 or more Archfoe bosses.", 40, true),
-		Title(64, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Veteran", "", "Unlocked 40 or more Bane bosses.", 40, true),
+		Title(56, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Annihilator", "", "Unlocked all Nemesis bosses.", 0, false),
+		Title(57, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Destroyer", "", "Unlocked 10 or more Archfoe bosses.", 10, true),
+		Title(58, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Devastator", "", "Unlocked 10 or more Nemesis bosses.", 10, true),
+		Title(59, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Eraser", "", "Unlocked all Archfoe bosses.", 0, false),
+		Title(60, BOSSTIARY, 0, "Boss Executioner", "", "Unlocked all bosses.", 0, false),
+		Title(61, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Hunter", "", "Unlocked 10 or more Bane bosses.", 10, true),
+		Title(62, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_NEMESIS), "Boss Obliterator", "", "Unlocked 40 or more Nemesis bosses.", 40, true),
+		Title(63, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Slayer", "", "Unlocked all Bane bosses.", 0, false),
+		Title(64, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_ARCHFOE), "Boss Smiter", "", "Unlocked 40 or more Archfoe bosses.", 40, true),
+		Title(65, BOSSTIARY, static_cast<uint16_t>(BosstiaryRarity_t::RARITY_BANE), "Boss Veteran", "", "Unlocked 40 or more Bane bosses.", 40, true),
 
-		Title(65, DAILY_REWARD, "Creature of Habit (Grade 1)", "Reward Streak of at least 7 days of consecutive logins.", 7, true),
-		Title(66, DAILY_REWARD, "Creature of Habit (Grade 2)", "Reward Streak of at least 30 days of consecutive logins.", 30, true),
-		Title(67, DAILY_REWARD, "Creature of Habit (Grade 3)", "Reward Streak of at least 90 days of consecutive logins.", 90, true),
-		Title(68, DAILY_REWARD, "Creature of Habit (Grade 4)", "Reward Streak of at least 180 days of consecutive logins.", 180, true),
-		Title(69, DAILY_REWARD, "Creature of Habit (Grade 5)", "Reward Streak of at least 365 days of consecutive logins.", 365, true),
+		Title(66, DAILY_REWARD, "Creature of Habit (Grade 1)", "Reward Streak of at least 7 days of consecutive logins.", 7, true),
+		Title(67, DAILY_REWARD, "Creature of Habit (Grade 2)", "Reward Streak of at least 30 days of consecutive logins.", 30, true),
+		Title(68, DAILY_REWARD, "Creature of Habit (Grade 3)", "Reward Streak of at least 90 days of consecutive logins.", 90, true),
+		Title(69, DAILY_REWARD, "Creature of Habit (Grade 4)", "Reward Streak of at least 180 days of consecutive logins.", 180, true),
+		Title(70, DAILY_REWARD, "Creature of Habit (Grade 5)", "Reward Streak of at least 365 days of consecutive logins.", 365, true),
 
-		Title(70, TASK, "Aspiring Huntsman", "Invested 160,000 tasks points.", 160000, true, "Aspiring Huntswoman"),
-		Title(71, TASK, "Competent Beastslayer", "Invested 320,000 tasks points.", 320000, true),
-		Title(72, TASK, "Feared Bountyhunter", "Invested 430,000 tasks points.", 430000, true),
+		Title(71, TASK, "Aspiring Huntsman", "Invested 160,000 tasks points.", 160000, true, "Aspiring Huntswoman"),
+		Title(72, TASK, "Competent Beastslayer", "Invested 320,000 tasks points.", 320000, true),
+		Title(73, TASK, "Feared Bountyhunter", "Invested 430,000 tasks points.", 430000, true),
 
-		Title(73, MAP, "Dedicated Entrepreneur", "Explored 50% of all the map areas.", 50, false),
-		Title(74, MAP, "Globetrotter", "Explored all map areas.", 100, false),
+		Title(74, MAP, "Dedicated Entrepreneur", "Explored 50% of all the map areas.", 50, false),
+		Title(75, MAP, "Globetrotter", "Explored all map areas.", 100, false),
 
-		Title(75, OTHERS, "Guild Leader", "Leading a Guild.", false),
-		Title(76, OTHERS, "Proconsul of Iksupan", "Only a true devotee to the cause of the ancient Iks and their lost legacy may step up to the rank of proconsul.", true),
-		Title(77, OTHERS, "Admirer of the Crown", "Adjust your crown and handle it.", true),
-		Title(78, OTHERS, "Big Spender", "Unlocked the full Golden Outfit.", true),
-		Title(79, OTHERS, "Challenger of the Iks", "Challenged Ahau, guardian of Iksupan, in traditional Iks warrior attire.", true),
-		Title(80, OTHERS, "Royal Bounacean Advisor", "Called to the court of Bounac by Kesar the Younger himself.", true),
-		Title(81, OTHERS, "Aeternal", "Awarded exclusively to stalwart heroes keeping the faith under all circumstances.", true),
-		Title(82, OTHERS, "Robinson Crusoe", "Some discoveries are reserved to only the most experienced adventurers. Until the next frontier opens on the horizon.", true),
-		Title(83, OTHERS, "Chompmeister", "Awarded only to true connoisseurs undertaking even the most exotic culinary escapades.", true),
-		Title(84, OTHERS, "Bringer of Rain", "Forging through battle after battle like a true gladiator.", true),
-		Title(85, OTHERS, "Beastly", "Reached 2000 charm points. Quite beastly!", true),
-		Title(86, OTHERS, "Midnight Hunter", "When the hunter becomes the hunted, perseverance decides the game.", true),
-		Title(87, OTHERS, "Ratinator", "Killing some snarky cave rats is helpful, killing over ten thousand of them is a statement.", true),
-		Title(88, OTHERS, "Doomsday Nemesis", "Awarded for great help in the battle against Gaz'haragoth.", true),
-		Title(89, OTHERS, "Hero of Bounac", "You prevailed during the battle of Bounac and broke the siege that held Bounac's people in its firm grasp.", true), // Derrotar o boss Drume.
-		Title(90, OTHERS, "King of Demon", "Defeat Morshabaal 5 times.", 0, true, "Queen of Demon"),
-		Title(91, OTHERS, "Planegazer", "Followed the trail of the Planestrider to the end.", true),
-		Title(92, OTHERS, "Time Traveller", "Anywhere in time or space.", true),
-		Title(93, OTHERS, "Truly Boss", "Reach 15,000 boss points.", true),
-		Title(94, OTHERS, "Pensive Wanderer", "You have honoured the Merudri by visiting all of their shrines and completing the ancient Three-Fold Path.", true),
+		Title(76, OTHERS, "Guild Leader", "Leading a Guild.", false),
+		Title(77, OTHERS, "Proconsul of Iksupan", "Only a true devotee to the cause of the ancient Iks and their lost legacy may step up to the rank of proconsul.", true),
+		Title(78, OTHERS, "Admirer of the Crown", "Adjust your crown and handle it.", true),
+		Title(79, OTHERS, "Big Spender", "Unlocked the full Golden Outfit.", true),
+		Title(80, OTHERS, "Challenger of the Iks", "Challenged Ahau, guardian of Iksupan, in traditional Iks warrior attire.", true),
+		Title(81, OTHERS, "Royal Bounacean Advisor", "Called to the court of Bounac by Kesar the Younger himself.", true),
+		Title(82, OTHERS, "Aeternal", "Awarded exclusively to stalwart heroes keeping the faith under all circumstances.", true),
+		Title(83, OTHERS, "Robinson Crusoe", "Some discoveries are reserved to only the most experienced adventurers. Until the next frontier opens on the horizon.", true),
+		Title(84, OTHERS, "Chompmeister", "Awarded only to true connoisseurs undertaking even the most exotic culinary escapades.", true),
+		Title(85, OTHERS, "Bringer of Rain", "Forging through battle after battle like a true gladiator.", true),
+		Title(86, OTHERS, "Beastly", "Reached 2000 charm points. Quite beastly!", true),
+		Title(87, OTHERS, "Midnight Hunter", "When the hunter becomes the hunted, perseverance decides the game.", true),
+		Title(88, OTHERS, "Ratinator", "Killing some snarky cave rats is helpful, killing over ten thousand of them is a statement.", true),
+		Title(89, OTHERS, "Doomsday Nemesis", "Awarded for great help in the battle against Gaz'haragoth.", true),
+		Title(90, OTHERS, "Hero of Bounac", "You prevailed during the battle of Bounac and broke the siege that held Bounac's people in its firm grasp.", true), // Derrotar o boss Drume.
+		Title(91, OTHERS, "King of Demon", "Defeat Morshabaal 5 times.", 0, true, "Queen of Demon"),
+		Title(92, OTHERS, "Planegazer", "Followed the trail of the Planestrider to the end.", true),
+		Title(93, OTHERS, "Time Traveller", "Anywhere in time or space.", true),
+		Title(94, OTHERS, "Truly Boss", "Reach 15,000 boss points.", true),
+		Title(95, OTHERS, "Pensive Wanderer", "You have honoured the Merudri by visiting all of their shrines and completing the ancient Three-Fold Path.", true),
 	};
 
 	m_highscoreCategoriesNames = {
@@ -780,6 +782,7 @@ void Game::loadCustomMaps(const std::filesystem::path &customMapPath) {
 }
 
 void Game::loadMap(const std::string &path, const Position &pos) {
+	lastMapLoadTime = OTSYS_TIME();
 	map.loadMap(path, false, false, false, false, false, pos);
 }
 
@@ -1168,7 +1171,7 @@ ReturnValue Game::getPlayerByNameWildcard(const std::string &s, std::shared_ptr<
 
 std::vector<std::shared_ptr<Player>> Game::getPlayersByAccount(const std::shared_ptr<Account> &acc, bool allowOffline /* = false */) {
 	auto [accountPlayers, error] = acc->getAccountPlayers();
-	if (error != AccountErrors_t::Ok) {
+	if (error != enumToValue(AccountErrors_t::Ok)) {
 		return {};
 	}
 	std::vector<std::shared_ptr<Player>> ret;
@@ -1293,7 +1296,12 @@ bool Game::removeCreature(const std::shared_ptr<Creature> &creature, bool isLogo
 		creature->setMaster(nullptr);
 	}
 
-	creature->getParent()->postRemoveNotification(creature, nullptr, 0);
+	auto parent = creature->getParent();
+	if (!parent) {
+		return false;
+	}
+
+	parent->postRemoveNotification(creature, nullptr, 0);
 	afterCreatureZoneChange(creature, fromZones, {});
 
 	creature->removeList();
@@ -1346,9 +1354,9 @@ void Game::playerInspectItem(const std::shared_ptr<Player> &player, const Positi
 	player->sendItemInspection(item->getID(), static_cast<uint8_t>(item->getItemCount()), item, false);
 }
 
-void Game::playerInspectItem(const std::shared_ptr<Player> &player, uint16_t itemId, uint8_t itemCount, bool cyclopedia) {
+void Game::playerInspectItem(const std::shared_ptr<Player> &player, uint16_t itemId, uint8_t itemCount, uint8_t inspectionType) {
 	metrics::method_latency measure(__METRICS_METHOD_NAME__);
-	player->sendItemInspection(itemId, itemCount, nullptr, cyclopedia);
+	player->sendItemInspection(itemId, itemCount, nullptr, inspectionType);
 }
 
 FILELOADER_ERRORS Game::loadAppearanceProtobuf(const std::string &file) {
@@ -2808,7 +2816,20 @@ void Game::addMoney(const std::shared_ptr<Cylinder> &cylinder, uint64_t money, u
 			const uint16_t createCount = std::min<uint32_t>(100, count);
 			const std::shared_ptr<Item> &remaindItem = Item::CreateItem(itemId, createCount);
 
-			ReturnValue ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+			ReturnValue ret = RETURNVALUE_NOTPOSSIBLE;
+			bool triedManaged = false;
+
+			if (const auto &player = std::dynamic_pointer_cast<Player>(cylinder)) {
+				if (!g_configManager().getBoolean(AUTOBANK)) {
+					ret = internalCollectManagedItems(player, remaindItem, getObjectCategory(remaindItem), true);
+					triedManaged = true;
+				}
+			}
+
+			if (!triedManaged || ret != RETURNVALUE_NOERROR) {
+				ret = internalAddItem(cylinder, remaindItem, INDEX_WHEREEVER, flags);
+			}
+
 			if (ret != RETURNVALUE_NOERROR) {
 				internalAddItem(cylinder->getTile(), remaindItem, INDEX_WHEREEVER, FLAG_NOLIMIT);
 			}
@@ -3067,6 +3088,26 @@ void Game::playerQuickLootCorpse(const std::shared_ptr<Player> &player, const st
 		}
 	}
 
+	bool hasLootavaible = false;
+	for (ContainerIterator it = corpse->iterator(); it.hasNext(); it.advance()) {
+		const auto &corpseItem = *it;
+		if (!corpseItem) {
+			continue;
+		}
+
+		const bool listed = player->isQuickLootListedItem(corpseItem);
+		if ((listed && ignoreListItems) || (!listed && !ignoreListItems)) {
+			continue;
+		}
+
+		hasLootavaible = true;
+		break;
+	}
+
+	if (!hasLootavaible) {
+		corpse->clearLootHighlight(player);
+	}
+
 	std::stringstream ss;
 	if (totalLootedGold != 0 || missedAnyGold || totalLootedItems != 0 || missedAnyItem) {
 		bool lootedAllGold = totalLootedGold != 0 && !missedAnyGold;
@@ -3140,6 +3181,8 @@ void Game::playerQuickLootCorpse(const std::shared_ptr<Player> &player, const st
 	} else {
 		player->sendTextMessage(MESSAGE_EVENT_ADVANCE, ss.str());
 	}
+
+	corpse->sendUpdateToClient(player);
 
 	player->lastQuickLootNotification = OTSYS_TIME();
 }
@@ -3446,6 +3489,10 @@ uint64_t Game::getItemMarketPrice(const std::map<uint16_t, uint64_t> &itemMap, b
 }
 
 std::shared_ptr<Item> searchForItem(const std::shared_ptr<Container> &container, uint16_t itemId, bool hasTier /* = false*/, uint8_t tier /* = 0*/) {
+	if (!container) {
+		return nullptr;
+	}
+
 	for (ContainerIterator it = container->iterator(); it.hasNext(); it.advance()) {
 		if ((*it)->getID() == itemId && (!hasTier || (*it)->getTier() == tier)) {
 			return *it;
@@ -3488,6 +3535,32 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t itemId, bool hasTier /* =
 		return;
 	}
 
+	const ItemType &it = Item::items[itemId];
+	Slots_t slot = getSlotType(it);
+
+	if (slot == CONST_SLOT_NECKLACE) {
+		if (!player->canEquipNecklace()) {
+			return;
+		}
+	} else if (slot == CONST_SLOT_RING) {
+		if (!player->canEquipRing()) {
+			return;
+		}
+	} else if (!player->canDoAction()) {
+		uint32_t delay = player->getNextActionTime();
+		if (delay > 0) {
+			const auto &task = createPlayerTask(
+				delay,
+				[this, playerId, itemId, hasTier, tier] {
+					playerEquipItem(playerId, itemId, hasTier, tier);
+				},
+				__FUNCTION__
+			);
+			player->setNextActionTask(task);
+		}
+		return;
+	}
+
 	if (player->hasCondition(CONDITION_FEARED)) {
 		/*
 		 *	When player is feared the player can´t equip any items.
@@ -3497,32 +3570,22 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t itemId, bool hasTier /* =
 	}
 
 	const auto &item = player->getInventoryItem(CONST_SLOT_BACKPACK);
-	if (!item) {
-		return;
-	}
-
-	const std::shared_ptr<Container> &backpack = item->getContainer();
-	if (!backpack) {
-		return;
-	}
-
-	if (player->getFreeBackpackSlots() == 0) {
-		player->sendCancelMessage(RETURNVALUE_NOTENOUGHROOM);
-		return;
-	}
-
-	const ItemType &it = Item::items[itemId];
-	Slots_t slot = getSlotType(it);
+	const auto &backpack = item ? item->getContainer() : nullptr;
 
 	const auto &slotItem = player->getInventoryItem(slot);
-	const auto &equipItem = searchForItem(backpack, it.id, hasTier, tier);
+	auto equipItem = searchForItem(backpack, it.id, hasTier, tier);
+	if (!equipItem) {
+		const auto &lootPouch = player->getLootPouch();
+		equipItem = searchForItem(lootPouch, it.id, hasTier, tier);
+	}
 	ReturnValue ret = RETURNVALUE_NOERROR;
-	if (slotItem && slotItem->getID() == it.id && (!it.stackable || slotItem->getItemCount() == slotItem->getStackSize() || !equipItem)) {
-		ret = internalMoveItem(slotItem->getParent(), player, CONST_SLOT_WHEREEVER, slotItem, slotItem->getItemCount(), nullptr);
-		g_logger().debug("Item {} was unequipped", slotItem->getName());
+
+	if (slotItem && slotItem->getID() == it.id && (!hasTier || slotItem->getTier() == tier) && !equipItem) {
+		ret = internalCollectManagedItems(player, slotItem, getObjectCategory(slotItem), false);
 	} else if (equipItem) {
 		// Shield slot item
 		const auto &rightItem = player->getInventoryItem(CONST_SLOT_RIGHT);
+
 		// Check Ammo item
 		if (it.weaponType == WEAPON_AMMO) {
 			if (rightItem && rightItem->isQuiver()) {
@@ -3532,62 +3595,39 @@ void Game::playerEquipItem(uint32_t playerId, uint16_t itemId, bool hasTier /* =
 			const auto &leftItem = player->getInventoryItem(CONST_SLOT_LEFT);
 
 			const int32_t &slotPosition = equipItem->getSlotPosition();
-
 			// Checks if a two-handed item is being equipped in the left slot when the right slot is already occupied and move to backpack
 			if (
 				(slotPosition & SLOTP_LEFT)
 				&& (slotPosition & SLOTP_TWO_HAND)
 				&& rightItem
-				&& !(it.weaponType == WEAPON_DISTANCE)
 				&& !rightItem->isQuiver()
-				&& (!leftItem || leftItem->getWeaponType() != WEAPON_DISTANCE)
 			) {
 				ret = internalCollectManagedItems(player, rightItem, getObjectCategory(rightItem), false);
 			}
 
-			/* FIX: Auto-unequip shield when equipping two-handed bow */
-			if (slot == CONST_SLOT_LEFT && (slotPosition & SLOTP_TWO_HAND) && equipItem->getWeaponType() == WEAPON_DISTANCE) {
-				if (rightItem && !rightItem->isQuiver()) {
-					// Unequip item from right slot (shield or other item)
-					ret = internalMoveItem(rightItem->getParent(), player, INDEX_WHEREEVER, rightItem, rightItem->getItemCount(), nullptr);
-					if (ret == RETURNVALUE_NOERROR) {
-						g_logger().debug("Item {} was unequipped to equip two-handed bow", rightItem->getName());
-					} else {
-						player->sendCancelMessage(ret);
-						return;
-					}
-				}
-			}
-
 			// Check if trying to equip a shield while a two-handed weapon is equipped in the left slot
-			if (slot == CONST_SLOT_RIGHT && leftItem && leftItem->getSlotPosition() & SLOTP_TWO_HAND) {
-				// FIX: Don't unequip bow if quiver is equipped */
-				if (!it.isQuiver() || leftItem->getWeaponType() != WEAPON_DISTANCE) {
-					// Unequip the two-handed weapon from the left slot
-					ret = internalMoveItem(leftItem->getParent(), player, INDEX_WHEREEVER, leftItem, leftItem->getItemCount(), nullptr);
-					if (ret == RETURNVALUE_NOERROR) {
-						g_logger().debug("Two-handed weapon {} was unequipped to equip shield", leftItem->getName());
-					} else {
-						player->sendCancelMessage(ret);
-						return;
-					}
+			if (slot == CONST_SLOT_RIGHT && !it.isQuiver() && leftItem && leftItem->getSlotPosition() & SLOTP_TWO_HAND) {
+				ret = internalMoveItem(leftItem->getParent(), player, INDEX_WHEREEVER, leftItem, leftItem->getItemCount(), nullptr);
+				if (ret != RETURNVALUE_NOERROR) {
+					player->sendCancelMessage(ret);
+					return;
 				}
-			}
-
-			if (slotItem) {
-				ret = internalMoveItem(slotItem->getParent(), player, INDEX_WHEREEVER, slotItem, slotItem->getItemCount(), nullptr);
-				g_logger().debug("Item {} was moved back to player", slotItem->getName());
 			}
 
 			ret = internalMoveItem(equipItem->getParent(), player, slot, equipItem, equipItem->getItemCount(), nullptr);
-			if (ret == RETURNVALUE_NOERROR) {
-				g_logger().debug("Item {} was equipped", equipItem->getName());
-			}
 		}
 	}
 
 	if (ret != RETURNVALUE_NOERROR) {
 		player->sendCancelMessage(ret);
+		return;
+	}
+	if (slot == CONST_SLOT_NECKLACE) {
+		player->setNextNecklaceAction(OTSYS_TIME() + g_configManager().getNumber(ACTIONS_DELAY_INTERVAL));
+	} else if (slot == CONST_SLOT_RING) {
+		player->setNextRingAction(OTSYS_TIME() + g_configManager().getNumber(ACTIONS_DELAY_INTERVAL));
+	} else {
+		player->setNextAction(OTSYS_TIME() + g_configManager().getNumber(ACTIONS_DELAY_INTERVAL));
 	}
 }
 
@@ -4113,14 +4153,13 @@ void Game::playerUseWithCreature(uint32_t playerId, const Position &fromPos, uin
 		return;
 	}
 
-	if (g_configManager().getBoolean(ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS)) {
-		if (std::shared_ptr<HouseTile> houseTile = std::dynamic_pointer_cast<HouseTile>(item->getTile())) {
-			const auto &house = houseTile->getHouse();
-			if (house && item->getRealParent() && item->getRealParent() != player && (!house->isInvited(player) || house->getHouseAccessLevel(player) == HOUSE_GUEST)) {
-				player->sendCancelMessage(RETURNVALUE_CANNOTUSETHISOBJECT);
-				return;
-			}
-		}
+	bool canUseHouseItem = !g_configManager().getBoolean(ONLY_INVITED_CAN_MOVE_HOUSE_ITEMS) || InternalGame::playerCanUseItemOnHouseTile(player, item);
+	if (!canUseHouseItem && item->hasOwner() && !item->isOwner(player)) {
+		player->sendCancelMessage(RETURNVALUE_ITEMISNOTYOURS);
+		return;
+	} else if (!canUseHouseItem) {
+		player->sendCancelMessage(RETURNVALUE_ITEMCANNOTBEMOVEDTHERE);
+		return;
 	}
 
 	const ItemType &it = Item::items[item->getID()];
@@ -4695,6 +4734,9 @@ std::shared_ptr<Item> Game::wrapItem(const std::shared_ptr<Item> &item, const st
 	}
 
 	newItem->setAttribute(ItemAttribute_t::OWNER, item->getAttribute<uint16_t>(ItemAttribute_t::OWNER));
+	if (const int64_t storeAttribute = item->getAttribute<int64_t>(ItemAttribute_t::STORE); storeAttribute > 0) {
+		newItem->setAttribute(ItemAttribute_t::STORE, storeAttribute);
+	}
 	newItem->startDecaying();
 	return newItem;
 }
@@ -4705,17 +4747,16 @@ void Game::unwrapItem(const std::shared_ptr<Item> &item, uint16_t unWrapId, cons
 		return;
 	}
 
-	auto hiddenCharges = item->getAttribute<uint16_t>(ItemAttribute_t::DATE);
 	const ItemType &newiType = Item::items.getItemType(unWrapId);
 	if (player != nullptr && house != nullptr && newiType.isBed() && house->getMaxBeds() > -1 && house->getBedCount() >= house->getMaxBeds()) {
 		player->sendCancelMessage("You reached the maximum beds in this house");
 		return;
 	}
 
-	auto amount = item->getAttribute<uint16_t>(ItemAttribute_t::AMOUNT);
-	if (!amount) {
-		amount = 1;
-	}
+	const uint16_t ownerAttr = item->getAttribute<uint16_t>(ItemAttribute_t::OWNER);
+	const int64_t storeAttr = item->getAttribute<int64_t>(ItemAttribute_t::STORE);
+	const uint16_t amountAttr = item->getAttribute<uint16_t>(ItemAttribute_t::AMOUNT);
+	const uint16_t amount = amountAttr ? amountAttr : 1;
 
 	std::shared_ptr<Item> newItem = transformItem(item, unWrapId, amount);
 	if (house && newiType.isBed()) {
@@ -4723,14 +4764,20 @@ void Game::unwrapItem(const std::shared_ptr<Item> &item, uint16_t unWrapId, cons
 	}
 
 	if (newItem) {
-		if (hiddenCharges > 0 && isCaskItem(unWrapId)) {
-			newItem->setSubType(hiddenCharges);
+		if (isCaskItem(unWrapId)) {
+			const uint16_t hiddenCharges = item->getAttribute<uint16_t>(ItemAttribute_t::DATE);
+			if (hiddenCharges > 0) {
+				newItem->setSubType(hiddenCharges);
+			}
 		}
 
 		newItem->removeCustomAttribute("unWrapId");
 		newItem->removeAttribute(ItemAttribute_t::DESCRIPTION);
 		newItem->startDecaying();
-		newItem->setAttribute(ItemAttribute_t::OWNER, item->getAttribute<uint16_t>(ItemAttribute_t::OWNER));
+		newItem->setAttribute(ItemAttribute_t::OWNER, ownerAttr);
+		if (storeAttr > 0) {
+			newItem->setAttribute(ItemAttribute_t::STORE, storeAttr);
+		}
 	}
 }
 
@@ -5718,7 +5765,10 @@ std::shared_ptr<Item> Game::getItemToLoot(const std::shared_ptr<Player> &player,
 std::shared_ptr<Container> Game::getCorpseFromItem(const std::shared_ptr<Item> &item, const Position &pos) {
 	std::shared_ptr<Container> corpse;
 	if (pos.x == 0xFFFF) {
-		corpse = item->getParent()->getContainer();
+		const auto &parent = item->getParent();
+		if (parent) {
+			corpse = parent->getContainer();
+		}
 		if (corpse && corpse->getID() == ITEM_BROWSEFIELD) {
 			corpse = item->getContainer();
 			browseField = true;
@@ -5782,6 +5832,8 @@ void Game::handleCorpseLoot(const std::shared_ptr<Player> &player, const std::sh
 	} else {
 		playerLootAllCorpses(player, pos, lootAll);
 	}
+
+	corpse->sendUpdateToClient(player);
 }
 
 void Game::sendLootMessageWithCooldown(const std::shared_ptr<Player> &player, const std::string &message) {
@@ -6512,7 +6564,7 @@ void Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type, c
 		return;
 	}
 
-	if (!text.empty() && text.front() == '/' && player->isAccessPlayer()) {
+	if (text.front() == '/' && player->isAccessPlayer()) {
 		return;
 	}
 
@@ -6568,12 +6620,17 @@ bool Game::playerSaySpell(const std::shared_ptr<Player> &player, SpeakClasses ty
 	}
 
 	std::string words = text;
-	TalkActionResult_t result = g_talkActions().checkPlayerCanSayTalkAction(player, type, words, type == TALKTYPE_SAY ? (unsigned)CHANNEL_DEFAULT : channelId);
-	if (result == TALKACTION_BREAK) {
-		return true;
+	const std::string &lowerWords = asLowerCaseString(words);
+
+	TalkActionResult_t result = TALKACTION_FAILED;
+	if (text.front() == '/' || text.front() == '!') {
+		result = g_talkActions().checkPlayerCanSayTalkAction(player, type, words, type == TALKTYPE_SAY ? (unsigned)CHANNEL_DEFAULT : channelId);
+		if (result == TALKACTION_BREAK) {
+			return true;
+		}
 	}
 
-	result = g_spells().playerSaySpell(player, words);
+	result = g_spells().playerSaySpell(player, words, lowerWords);
 	if (result == TALKACTION_BREAK) {
 		if (!g_configManager().getBoolean(PUSH_WHEN_ATTACKING)) {
 			player->cancelPush();
@@ -9584,7 +9641,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t ite
 		}
 
 		if (it.id == ITEM_STORE_COIN) {
-			auto [transferableCoins, result] = player->getAccount()->getCoins(CoinType::Transferable);
+			auto [transferableCoins, result] = player->getAccount()->getCoins(enumToValue(CoinType::Transferable));
 
 			if (amount > transferableCoins) {
 				offerStatus << "Amount is greater than coins for player " << player->getName();
@@ -9592,7 +9649,7 @@ void Game::playerCreateMarketOffer(uint32_t playerId, uint8_t type, uint16_t ite
 			}
 
 			// Do not register a transaction for coins creating an offer
-			player->getAccount()->removeCoins(CoinType::Transferable, static_cast<uint32_t>(amount), "");
+			player->getAccount()->removeCoins(enumToValue(CoinType::Transferable), static_cast<uint32_t>(amount), "");
 		} else {
 			if (player->getStashItemCount(it.wareId) > 0) {
 				g_logger().debug("[Market] Player {} has item {} in stash, forcing tier 0 for the offer.", player->getName(), itemId);
@@ -9679,7 +9736,7 @@ void Game::playerCancelMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 
 		if (it.id == ITEM_STORE_COIN) {
 			// Do not register a transaction for coins upon cancellation
-			player->getAccount()->addCoins(CoinType::Transferable, offer.amount, "");
+			player->getAccount()->addCoins(enumToValue(CoinType::Transferable), offer.amount, "");
 		} else if (it.stackable) {
 			uint16_t tmpAmount = offer.amount;
 
@@ -9798,20 +9855,15 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		const auto &buyerPlayerInbox = buyerPlayer->getInbox();
 
 		if (it.id == ITEM_STORE_COIN) {
-			auto [transferableCoins, error] = playerAccount->getCoins(CoinType::Transferable);
-
-			if (error != AccountErrors_t::Ok) {
-				offerStatus << "Failed to load transferable coins for player " << player->getName();
-				return;
-			}
+			auto [transferableCoins, result] = player->getAccount()->getCoins(enumToValue(CoinType::Transferable));
 
 			if (amount > transferableCoins) {
-				offerStatus << "Amount is greater than coins";
+				offerStatus << "Amount is greater than coins for player " << player->getName();
 				return;
 			}
 
 			playerAccount->removeCoins(
-				CoinType::Transferable,
+				enumToValue(CoinType::Transferable),
 				amount,
 				"Sold on Market"
 			);
@@ -9839,7 +9891,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		g_metrics().addCounter("balance_increase", totalPrice, { { "player", player->getName() }, { "context", "market_sale" } });
 
 		if (it.id == ITEM_STORE_COIN) {
-			buyerPlayer->getAccount()->addCoins(CoinType::Transferable, amount, "Purchased on Market");
+			buyerPlayer->getAccount()->addCoins(enumToValue(CoinType::Transferable), amount, "Purchased on Market");
 		} else if (it.stackable) {
 			uint16_t tmpAmount = amount;
 			while (tmpAmount > 0) {
@@ -9910,7 +9962,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		g_metrics().addCounter("balance_decrease", totalPrice, { { "player", player->getName() }, { "context", "market_purchase" } });
 
 		if (it.id == ITEM_STORE_COIN) {
-			player->getAccount()->addCoins(CoinType::Transferable, amount, "Purchased on Market");
+			player->getAccount()->addCoins(enumToValue(CoinType::Transferable), amount, "Purchased on Market");
 		} else if (it.stackable) {
 			uint16_t tmpAmount = amount;
 			while (tmpAmount > 0) {
@@ -9964,7 +10016,7 @@ void Game::playerAcceptMarketOffer(uint32_t playerId, uint32_t timestamp, uint16
 		sellerPlayer->setBankBalance(sellerPlayer->getBankBalance() + totalPrice);
 		g_metrics().addCounter("balance_increase", totalPrice, { { "player", sellerPlayer->getName() }, { "context", "market_sale" } });
 		if (it.id == ITEM_STORE_COIN) {
-			sellerPlayer->getAccount()->registerCoinTransaction(CoinTransactionType::Remove, CoinType::Transferable, amount, "Sold on Market");
+			sellerPlayer->getAccount()->registerCoinTransaction(enumToValue(CoinTransactionType::Remove), enumToValue(CoinType::Transferable), amount, "Sold on Market");
 		}
 
 		if (it.id != ITEM_STORE_COIN) {
@@ -10746,8 +10798,12 @@ uint32_t Game::makeFiendishMonster(uint32_t forgeableMonsterId /* = 0*/, bool cr
 		// If the forgeable monsters haven't been created
 		// Then we'll create them so they don't return in the next if (forgeableMonsters.empty())
 		for (const auto &[monsterId, monster] : monsters) {
-			auto monsterTile = monster->getTile();
-			if (!monster || !monsterTile) {
+			if (!monster) {
+				continue;
+			}
+
+			const auto monsterTile = monster->getTile();
+			if (!monsterTile) {
 				continue;
 			}
 
@@ -10868,6 +10924,17 @@ void Game::updateFiendishMonsterStatus(uint32_t monsterId, const std::string &mo
 	makeFiendishMonster();
 }
 
+void Game::updateInfluencedMonsterStatus(uint32_t monsterId, const std::string &monsterName) {
+	const auto &monster = getMonsterByID(monsterId);
+	if (!monster) {
+		g_logger().warn("[{}] Failed to update monster with id {} and name {}, monster not found", __FUNCTION__, monsterId, monsterName);
+	} else {
+		monster->clearInfluencedStatus();
+	}
+
+	removeInfluencedMonster(monsterId, false);
+}
+
 bool Game::removeForgeMonster(uint32_t id, ForgeClassifications_t monsterForgeClassification, bool create) {
 	if (monsterForgeClassification == ForgeClassifications_t::FORGE_FIENDISH_MONSTER) {
 		removeFiendishMonster(id, create);
@@ -10915,11 +10982,11 @@ bool Game::removeFiendishMonster(uint32_t id, bool create /* = true*/) {
 }
 
 void Game::updateForgeableMonsters() {
-	if (auto influencedLimit = g_configManager().getNumber(FORGE_INFLUENCED_CREATURES_LIMIT);
+	if (auto influencedLimit = getInfluencedLimit();
 	    forgeableMonsters.size() < influencedLimit) {
 		forgeableMonsters.clear();
 		for (const auto &[monsterId, monster] : monsters) {
-			const auto &monsterTile = monster->getTile();
+			const auto monsterTile = monster->getTile();
 			if (!monsterTile) {
 				continue;
 			}
@@ -10936,10 +11003,29 @@ void Game::updateForgeableMonsters() {
 		}
 	}
 
-	uint32_t fiendishLimit = g_configManager().getNumber(FORGE_FIENDISH_CREATURES_LIMIT); // Fiendish Creatures limit
+	for (const auto &monsterId : getInfluencedMonsters()) {
+		if (!getMonsterByID(monsterId)) {
+			removeInfluencedMonster(monsterId);
+		}
+	}
+
+	uint32_t fiendishLimit = getFiendishLimit(); // Fiendish Creatures limit
 	if (fiendishMonsters.size() < fiendishLimit) {
 		createFiendishMonsters();
 	}
+
+	uint32_t influencedLimit = getInfluencedLimit();
+	if (influencedMonsters.size() < influencedLimit) {
+		createInfluencedMonsters(false);
+	}
+}
+
+uint32_t Game::getFiendishLimit() const {
+	return static_cast<uint32_t>(g_configManager().getNumber(FORGE_FIENDISH_CREATURES_LIMIT) * g_eventsScheduler().getFiendishSchedule() / 100);
+}
+
+uint32_t Game::getInfluencedLimit() const {
+	return static_cast<uint32_t>(g_configManager().getNumber(FORGE_INFLUENCED_CREATURES_LIMIT) * g_eventsScheduler().getInfluencedSchedule() / 100);
 }
 
 void Game::createFiendishMonsters() {
@@ -10960,21 +11046,19 @@ void Game::createFiendishMonsters() {
 	}
 }
 
-void Game::createInfluencedMonsters() {
-	uint32_t created = 0;
-	uint32_t influencedLimit = g_configManager().getNumber(FORGE_INFLUENCED_CREATURES_LIMIT);
-
-	while (influencedMonsters.size() < influencedLimit) {
-		if (influencedMonsters.size() >= influencedLimit) {
-			g_logger().warn("[{}] - Returning in creation of Influenced, size: {}, max is: {}.", __FUNCTION__, influencedMonsters.size(), influencedLimit);
-			break;
+void Game::createInfluencedMonsters(bool scheduleEvent /* = true */) {
+	uint32_t influencedLimit = getInfluencedLimit();
+	if (influencedMonsters.size() < influencedLimit) {
+		uint32_t toCreate = influencedLimit - static_cast<uint32_t>(influencedMonsters.size());
+		for (uint32_t i = 0; i < toCreate; ++i) {
+			if (makeInfluencedMonster() == 0) {
+				break;
+			}
 		}
+	}
 
-		if (auto ret = makeInfluencedMonster(); ret == 0) { // Condition
-			return;
-		}
-
-		created++;
+	if (scheduleEvent) {
+		scheduleInfluencedMonstersUpdate();
 	}
 }
 
@@ -10988,7 +11072,7 @@ void Game::checkForgeEventId(uint32_t monsterId) {
 
 bool Game::addInfluencedMonster(const std::shared_ptr<Monster> &monster) {
 	if (monster && monster->canBeForgeMonster()) {
-		if (auto maxInfluencedMonsters = static_cast<uint32_t>(g_configManager().getNumber(FORGE_INFLUENCED_CREATURES_LIMIT));
+		if (auto maxInfluencedMonsters = static_cast<uint32_t>(getInfluencedLimit());
 		    // If condition
 		    (influencedMonsters.size() + 1) > maxInfluencedMonsters) {
 			return false;
@@ -11000,6 +11084,49 @@ bool Game::addInfluencedMonster(const std::shared_ptr<Monster> &monster) {
 		return true;
 	}
 	return false;
+}
+
+void Game::batchRefreshInfluencedMonsters() {
+	std::vector<uint32_t> toRefresh(influencedMonsters.begin(), influencedMonsters.end());
+	for (const auto monsterId : toRefresh) {
+		const auto &monster = getMonsterByID(monsterId);
+		std::string name = monster ? monster->getName() : "";
+		updateInfluencedMonsterStatus(monsterId, name);
+	}
+
+	createInfluencedMonsters();
+}
+
+void Game::scheduleInfluencedMonstersUpdate() {
+	if (influencedMonstersEventId != 0) {
+		g_dispatcher().stopEvent(influencedMonstersEventId);
+	}
+
+	std::string saveIntervalType = g_configManager().getString(FORGE_INFLUENCED_INTERVAL_TYPE);
+	auto saveIntervalConfigTime = std::atoi(g_configManager().getString(FORGE_INFLUENCED_INTERVAL_TIME).c_str());
+	int intervalTime = 0;
+	if (saveIntervalType == "second") {
+		intervalTime = 1000;
+	} else if (saveIntervalType == "minute") {
+		intervalTime = 60 * 1000;
+	} else if (saveIntervalType == "hour") {
+		intervalTime = 60 * 60 * 1000;
+	}
+
+	uint32_t finalTime = 0;
+	if (intervalTime == 0) {
+		g_logger().warn("Influenced interval type is wrong, setting default time to 1h");
+		finalTime = 3600 * 1000;
+	} else {
+		finalTime = static_cast<uint32_t>(saveIntervalConfigTime * intervalTime);
+	}
+
+	auto schedulerTask = createPlayerTask(
+		finalTime,
+		[this] { batchRefreshInfluencedMonsters(); },
+		__FUNCTION__
+	);
+	influencedMonstersEventId = g_dispatcher().scheduleEvent(schedulerTask);
 }
 
 bool Game::addItemStoreInbox(const std::shared_ptr<Player> &player, uint32_t itemId) {
@@ -11100,7 +11227,15 @@ void Game::playerRewardChestCollect(uint32_t playerId, const Position &pos, uint
 		return;
 	}
 
-	playerRewardChest->setParent(item->getContainer()->getParent()->getTile());
+	const auto &container = item->getContainer();
+	if (container) {
+		const auto &parent = container->getParent();
+		const auto &tile = parent ? parent->getTile() : nullptr;
+		if (tile) {
+			playerRewardChest->setParent(tile);
+		}
+	}
+
 	for (const auto &[mapRewardId, reward] : player->rewardMap) {
 		reward->setParent(playerRewardChest);
 	}

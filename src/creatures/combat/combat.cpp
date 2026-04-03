@@ -78,10 +78,10 @@ static void applyImproveMonkAttackSpender(const std::shared_ptr<Player> &player,
 		return;
 	}
 
-	uint8_t baseHarmonyBonusPercent = 8; // 8, 16, 32, 64, 128
+	uint8_t baseHarmonyBonusPercent = 7; // 7, 14, 28, 56, 112
 
 	if (player->getVirtue() == VIRTUE_HARMONY) {
-		baseHarmonyBonusPercent += (player->isSerene() ? 8 : 4);
+		baseHarmonyBonusPercent += (player->isSerene() ? 6 : 3);
 	}
 
 	const uint8_t stage = player->wheel()->getStage(WheelStage_t::ASCETIC);
@@ -718,7 +718,7 @@ void Combat::CombatHealthFunc(const std::shared_ptr<Creature> &caster, const std
 					const uint16_t skillLevel = attackerPlayer->getSkillLevel(skillType);
 					const int32_t bonus = static_cast<int32_t>(std::ceil(skillLevel * bonusPercent));
 
-					g_logger().debug("[{}] skillPercentageAsExtraDamageForAutoAttack antes {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
+					g_logger().debug("[{}] skillPercentageAsExtraDamageForAutoAttack before {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
 
 					if (damage.primary.value > 0) {
 						damage.primary.value -= bonus;
@@ -728,44 +728,54 @@ void Combat::CombatHealthFunc(const std::shared_ptr<Creature> &caster, const std
 						damage.secondary.value -= bonus;
 					}
 
-					g_logger().debug("[{}] skillPercentageAsExtraDamageForAutoAttack depois {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
+					g_logger().debug("[{}] skillPercentageAsExtraDamageForAutoAttack after {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
 				}
 			}
 		}
 
 		if (!damage.instantSpellName.empty()) {
+			// Helper: use magic level when requested by perk
+			auto getProficiencyStatLevel = [&](skills_t skillType) -> uint32_t {
+				if (skillType == SKILL_MAGLEVEL) {
+					return attackerPlayer->getMagicLevel();
+				}
+				return attackerPlayer->getSkillLevel(skillType);
+			};
+
 			// Proficiency Perk: skillPercentageAsExtraHealingForSpells
 			if (damage.primary.type == COMBAT_HEALING) {
 				for (const auto &[skillType, bonusPercent] : proficiencyPerk.skillPercentageAsExtraHealingForSpells) {
-					const uint16_t skillLevel = attackerPlayer->getSkillLevel(skillType);
-					const int32_t bonus = static_cast<int32_t>(std::ceil(skillLevel * bonusPercent));
+					const uint32_t statLevel = getProficiencyStatLevel(skillType);
+					const int32_t bonus = static_cast<int32_t>(std::ceil(statLevel * bonusPercent));
 
-					g_logger().debug("[{}] skillPercentageAsExtraHealingForSpells antes {} / bonus {} skill id {}", __FUNCTION__, damage.primary.value, bonus, static_cast<uint8_t>(skillType));
+					g_logger().debug("[{}] skillPercentageAsExtraHealingForSpells before {} / bonus {} skill id {}", __FUNCTION__, damage.primary.value, bonus, static_cast<uint8_t>(skillType));
 
 					if (damage.primary.value > 0) {
 						damage.primary.value += bonus;
 					}
 
-					g_logger().debug("[{}] skillPercentageAsExtraHealingForSpells depois {} / bonus {} skill id {}", __FUNCTION__, damage.primary.value, bonus, static_cast<uint8_t>(skillType));
+					g_logger().debug("[{}] skillPercentageAsExtraHealingForSpells after {} / bonus {} skill id {}", __FUNCTION__, damage.primary.value, bonus, static_cast<uint8_t>(skillType));
 				}
 			}
 
 			// Proficiency Perk: skillPercentageAsExtraDamageForSpells
-			for (const auto &[skillType, bonusPercent] : proficiencyPerk.skillPercentageAsExtraDamageForSpells) {
-				const uint16_t skillLevel = attackerPlayer->getSkillLevel(skillType);
-				const int32_t bonus = static_cast<int32_t>(std::ceil(skillLevel * bonusPercent));
+			if (damage.primary.type != COMBAT_HEALING) {
+				for (const auto &[skillType, bonusPercent] : proficiencyPerk.skillPercentageAsExtraDamageForSpells) {
+					const uint32_t statLevel = getProficiencyStatLevel(skillType);
+					const int32_t bonus = static_cast<int32_t>(std::ceil(statLevel * bonusPercent));
 
-				g_logger().debug("[{}] skillPercentageAsExtraDamageForSpells antes {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
+					g_logger().debug("[{}] skillPercentageAsExtraDamageForSpells before {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
 
-				if (damage.primary.value > 0) {
-					damage.primary.value -= bonus;
+					if (damage.primary.value < 0) {
+						damage.primary.value -= bonus;
+					}
+
+					if (damage.secondary.value < 0) {
+						damage.secondary.value -= bonus;
+					}
+
+					g_logger().debug("[{}] skillPercentageAsExtraDamageForSpells after {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
 				}
-
-				if (damage.secondary.value > 0) {
-					damage.secondary.value -= bonus;
-				}
-
-				g_logger().debug("[{}] skillPercentageAsExtraDamageForSpells depois {} / {} bonus {} skill id {}", __FUNCTION__, damage.primary.value, damage.secondary.value, bonus, static_cast<uint8_t>(skillType));
 			}
 		}
 
@@ -1179,6 +1189,22 @@ void Combat::addDistanceEffect(const std::shared_ptr<Creature> &caster, const Po
 			case WEAPON_CLUB:
 				effect = CONST_ANI_WHIRLWINDCLUB;
 				break;
+			case WEAPON_DISTANCE:
+			case WEAPON_AMMO: {
+				auto ammoOrWeapon = player->getWeapon();
+				if (ammoOrWeapon) {
+					const auto &iType = Item::items[ammoOrWeapon->getID()];
+					effect = iType.shootType;
+					if (effect == CONST_ANI_NONE) {
+						auto mainWeapon = player->getWeapon(true);
+						if (mainWeapon) {
+							const auto &mainType = Item::items[mainWeapon->getID()];
+							effect = mainType.shootType;
+						}
+					}
+				}
+				break;
+			}
 			case WEAPON_MISSILE: {
 				auto weapon = player->getWeapon();
 				if (weapon) {
@@ -1278,12 +1304,15 @@ void Combat::setupChain(const std::shared_ptr<Weapon> &weapon) {
 			break;
 		case WEAPON_DISTANCE:
 			setCommonValues(g_configManager().getFloat(COMBAT_CHAIN_SKILL_FORMULA_DISTANCE), DIST_ATK_BOW, CONST_ANI_HOLY);
+			setParam(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE);
 			break;
 		case WEAPON_AMMO:
 			setCommonValues(g_configManager().getFloat(COMBAT_CHAIN_SKILL_FORMULA_DISTANCE), DIST_ATK_BOW, CONST_ANI_HOLY);
+			setParam(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE);
 			break;
 		case WEAPON_MISSILE:
 			setCommonValues(g_configManager().getFloat(COMBAT_CHAIN_SKILL_FORMULA_MISSILE), DIST_ATK_BOW, CONST_ANI_HOLY);
+			setParam(COMBAT_PARAM_DISTANCEEFFECT, CONST_ANI_WEAPONTYPE);
 			break;
 	}
 

@@ -5,13 +5,13 @@ CREATE TABLE IF NOT EXISTS `server_config` (
     CONSTRAINT `server_config_pk` PRIMARY KEY (`config`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '58'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
+INSERT INTO `server_config` (`config`, `value`) VALUES ('db_version', '61'), ('motd_hash', ''), ('motd_num', '0'), ('players_record', '0');
 
 -- Table structure `accounts`
 CREATE TABLE IF NOT EXISTS `accounts` (
     `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
     `name` varchar(32) NOT NULL,
-    `password` TEXT NOT NULL,
+    `password` VARCHAR(255) NOT NULL,
     `email` varchar(255) NOT NULL DEFAULT '',
     `premdays` int(11) NOT NULL DEFAULT '0',
     `premdays_purchased` int(11) NOT NULL DEFAULT '0',
@@ -24,7 +24,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
     `recruiter` INT(6) DEFAULT 0,
     `house_bid_id` int(11) NOT NULL DEFAULT '0',
     CONSTRAINT `accounts_pk` PRIMARY KEY (`id`),
-    CONSTRAINT `accounts_unique` UNIQUE (`name`)
+    CONSTRAINT `accounts_unique` UNIQUE (`name`),
+    INDEX `accounts_email` (`email`),
+    INDEX `accounts_password` (`password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Table structure `coins_transactions`
@@ -226,7 +228,7 @@ CREATE TABLE IF NOT EXISTS `account_vipgroups` (
     `account_id` int(11) UNSIGNED NOT NULL COMMENT 'id of account whose vip group entry it is',
     `name` varchar(128) NOT NULL,
     `customizable` BOOLEAN NOT NULL DEFAULT '1',
-    CONSTRAINT `account_vipgroups_pk` PRIMARY KEY (`id`, `account_id`),
+    CONSTRAINT `account_vipgroups_pk` PRIMARY KEY (`id`),
     CONSTRAINT `account_vipgroups_accounts_fk`
         FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`)
         ON DELETE CASCADE
@@ -574,15 +576,15 @@ CREATE TABLE IF NOT EXISTS `players_online` (
 -- Table structure `player_charm`
 CREATE TABLE IF NOT EXISTS `player_charms` (
     `player_id` int(11) NOT NULL,
-    `charm_points` SMALLINT NOT NULL DEFAULT '0',
-    `minor_charm_echoes` SMALLINT NOT NULL DEFAULT '0',
-    `max_charm_points` SMALLINT NOT NULL DEFAULT '0',
-    `max_minor_charm_echoes` SMALLINT NOT NULL DEFAULT '0',
+    `charm_points` int(10) UNSIGNED NOT NULL DEFAULT 0,
+    `minor_charm_echoes` int(10) UNSIGNED NOT NULL DEFAULT 0,
+    `max_charm_points` int(10) UNSIGNED NOT NULL DEFAULT 0,
+    `max_minor_charm_echoes` int(10) UNSIGNED NOT NULL DEFAULT 0,
     `charm_expansion` BOOLEAN NOT NULL DEFAULT FALSE,
     `UsedRunesBit` INT NOT NULL DEFAULT '0',
     `UnlockedRunesBit` INT NOT NULL DEFAULT '0',
     `charms` BLOB NULL,
-    `tracker list` BLOB NULL,
+    `tracker_list` BLOB NULL,
     CONSTRAINT `player_charms_players_fk`
         FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET=utf8;

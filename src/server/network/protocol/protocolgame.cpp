@@ -46,11 +46,13 @@
 #include "game/game.hpp"
 #include "game/modal_window/modal_window.hpp"
 #include "game/scheduling/dispatcher.hpp"
+#include "game/scheduling/save_manager.hpp"
 #include "io/functions/iologindata_load_player.hpp"
 #include "io/io_bosstiary.hpp"
 #include "io/iobestiary.hpp"
 #include "io/iologindata.hpp"
 #include "io/iomarket.hpp"
+#include "io/ioguild.hpp"
 #include "io/ioprey.hpp"
 #include "items/items_classification.hpp"
 #include "items/weapons/weapons.hpp"
@@ -66,6 +68,9 @@
 #include "enums/object_category.hpp"
 #include "enums/player_blessings.hpp"
 #include "enums/player_cyclopedia.hpp"
+#include "enums/container_type.hpp"
+
+#include <memory>
 
 /*
  * NOTE: This namespace is used so that we can add functions without having to declare them in the ".hpp/.hpp" file
@@ -83,6 +88,43 @@ namespace {
 		}
 
 		return totalIterationCount;
+	}
+
+	template <typename LookupFunc>
+	void addExivaEntries(NetworkMessage &msg, std::vector<uint32_t> &whitelist, std::vector<std::string> &addedNames, std::unordered_set<uint32_t> &addedGuids, int32_t maxLimit, LookupFunc lookup) {
+		const auto size = msg.get<uint16_t>();
+		uint32_t lookupAttempts = 0;
+		for (uint16_t i = 0; i < size; i++) {
+			std::string name = msg.getString();
+			if (whitelist.size() >= static_cast<size_t>(maxLimit) || addedGuids.size() >= static_cast<size_t>(maxLimit) || lookupAttempts >= static_cast<uint32_t>(maxLimit)) {
+				continue;
+			}
+
+			lookupAttempts++;
+			uint32_t id = lookup(name);
+			if (id != 0 && addedGuids.insert(id).second && std::ranges::find(whitelist, id) == whitelist.end()) {
+				whitelist.push_back(id);
+				addedNames.push_back(name);
+			}
+		}
+	}
+
+	template <typename LookupFunc>
+	void removeExivaEntries(NetworkMessage &msg, std::vector<uint32_t> &whitelist, std::vector<std::string> &removedNames, std::unordered_set<uint32_t> &removedGuids, int32_t maxLimit, LookupFunc lookup) {
+		const auto size = msg.get<uint16_t>();
+		uint32_t lookupAttempts = 0;
+		for (uint16_t i = 0; i < size; i++) {
+			std::string name = msg.getString();
+			if (removedGuids.size() >= static_cast<size_t>(maxLimit) || lookupAttempts >= static_cast<uint32_t>(maxLimit)) {
+				continue;
+			}
+
+			lookupAttempts++;
+			uint32_t id = lookup(name);
+			if (id != 0 && removedGuids.insert(id).second && std::erase(whitelist, id) > 0) {
+				removedNames.push_back(name);
+			}
+		}
 	}
 
 	void addOutfitAndMountBytes(NetworkMessage &msg, const std::shared_ptr<Item> &item, const CustomAttribute* attribute, const std::string &head, const std::string &body, const std::string &legs, const std::string &feet, bool addAddon = false, bool addByte = false) {
@@ -459,48 +501,34 @@ void ProtocolGame::AddItem(NetworkMessage &msg, const std::shared_ptr<Item> &ite
 		return;
 	}
 
-	if (it.isContainer()) {
-		uint8_t containerType = 0;
-
-		std::shared_ptr<Container> container = item->getContainer();
-		if (container && containerType == 0 && container->getHoldingPlayer() == player) {
-			uint32_t lootFlags = 0;
-			uint32_t obtainFlags = 0;
-			for (const auto &[category, containerMap] : player->m_managedContainers) {
-				if (!isValidObjectCategory(category)) {
-					continue;
-				}
-				if (containerMap.first == container) {
-					lootFlags |= 1 << category;
-				}
-				if (containerMap.second == container) {
-					obtainFlags |= 1 << category;
-				}
-			}
-
-			if (lootFlags != 0 || obtainFlags != 0) {
-				containerType = 9;
-				msg.addByte(containerType);
+	const auto &container = item->getContainer();
+	if (it.isContainer() && container) {
+		ContainerSpecial_t containerType = container->getSpecialCategory(player);
+		msg.addByte(enumToValue(containerType));
+		switch (containerType) {
+			case ContainerSpecial_t::LootHighlight:
+				break;
+			case ContainerSpecial_t::Manager: {
+				auto [lootFlags, obtainFlags] = container->getObjectCategoryFlags(player);
 				msg.add<uint32_t>(lootFlags);
 				msg.add<uint32_t>(obtainFlags);
+				break;
 			}
-		}
-
-		// Quiver ammo count
-		if (container && containerType == 0 && item->isQuiver() && player->getThing(CONST_SLOT_RIGHT) == item) {
-			uint16_t ammoTotal = 0;
-			for (const std::shared_ptr<Item> &listItem : container->getItemList()) {
-				if (player->getLevel() >= Item::items[listItem->getID()].minReqLevel) {
-					ammoTotal += listItem->getItemCount();
-				}
+			case ContainerSpecial_t::ContentCounter: {
+				auto ammoTotal = container->getAmmoAmount(player);
+				msg.add<uint32_t>(ammoTotal);
+				break;
 			}
-			containerType = 2;
-			msg.addByte(containerType);
-			msg.add<uint32_t>(ammoTotal);
-		}
-
-		if (containerType == 0) {
-			msg.addByte(0x00);
+			case ContainerSpecial_t::QuiverLoot: {
+				auto ammoTotal = container->getAmmoAmount(player);
+				auto [lootFlags, obtainFlags] = container->getObjectCategoryFlags(player);
+				msg.add<uint32_t>(lootFlags);
+				msg.add<uint32_t>(ammoTotal);
+				msg.add<uint32_t>(obtainFlags);
+				break;
+			}
+			default:
+				break;
 		}
 	}
 
@@ -788,6 +816,11 @@ void ProtocolGame::connect(const std::string &playerName, OperatingSystem_t oper
 
 	player->client = getThis();
 	player->openPlayerContainers();
+
+	player->sendHarmonyProtocol();
+	player->sendSereneProtocol();
+	player->resyncSpellCooldowns();
+
 	sendAddCreature(player, player->getPosition(), 0, true);
 	player->lastIP = player->getIP();
 	player->lastLoad = OTSYS_TIME();
@@ -1034,9 +1067,17 @@ void ProtocolGame::disconnectClient(const std::string &message) const {
 }
 
 void ProtocolGame::writeToOutputBuffer(NetworkMessage &msg) {
-	g_dispatcher().safeCall([self = getThis(), msg = std::move(msg)] {
-		self->getOutputBuffer(msg.getLength())->append(msg);
-	});
+	if (g_dispatcher().context().isAsync()) {
+		auto msgPtr = std::make_shared<NetworkMessage>(msg);
+		g_dispatcher().addEvent(
+			[self = getThis(), msgPtr] {
+				self->getOutputBuffer(msgPtr->getLength())->append(*msgPtr);
+			},
+			__FUNCTION__
+		);
+	} else {
+		getOutputBuffer(msg.getLength())->append(msg);
+	}
 }
 
 void ProtocolGame::parsePacket(NetworkMessage &msg) {
@@ -1407,7 +1448,7 @@ void ProtocolGame::parsePacketFromDispatcher(NetworkMessage &msg, uint8_t recvby
 		case 0xC9: /* update tile */
 			break;
 		case 0xCA:
-			parseUpdateContainer(msg);
+			parseExivaRestrictions(msg);
 			break;
 		case 0xCB:
 			parseBrowseField(msg);
@@ -1593,6 +1634,10 @@ void ProtocolGame::GetTileDescription(const std::shared_ptr<Tile> &tile, Network
 	if (creatures) {
 		bool playerAdded = false;
 		for (auto creature : std::ranges::reverse_view(*creatures)) {
+			if (!creature || creature->isRemoved() || !creature->isAlive()) {
+				continue;
+			}
+
 			if (!player->canSeeCreature(creature)) {
 				continue;
 			}
@@ -2101,8 +2146,9 @@ void ProtocolGame::parseSay(NetworkMessage &msg) {
 			break;
 	}
 
-	const std::string text = msg.getString();
-	if (text.length() > 255) {
+	std::string text = msg.getString();
+	trimString(text);
+	if (text.empty() || text.length() > 255) {
 		return;
 	}
 
@@ -2268,10 +2314,10 @@ void ProtocolGame::parseInspectionObject(NetworkMessage &msg) {
 	if (inspectionType == INSPECT_NORMALOBJECT) {
 		Position pos = msg.getPosition();
 		g_game().playerInspectItem(player, pos);
-	} else if (inspectionType == INSPECT_NPCTRADE || inspectionType == INSPECT_CYCLOPEDIA) {
+	} else if (inspectionType == INSPECT_NPCTRADE || inspectionType == INSPECT_CYCLOPEDIA || inspectionType == INSPECT_PROFICIENCY) {
 		auto itemId = msg.get<uint16_t>();
 		uint16_t itemCount = msg.getByte();
-		g_game().playerInspectItem(player, itemId, static_cast<int8_t>(itemCount), (inspectionType == INSPECT_CYCLOPEDIA));
+		g_game().playerInspectItem(player, itemId, static_cast<int8_t>(itemCount), inspectionType);
 	}
 }
 
@@ -2285,7 +2331,7 @@ void ProtocolGame::sendSessionEndInformation(SessionEndInformations information)
 	disconnect();
 }
 
-void ProtocolGame::sendItemInspection(uint16_t itemId, uint8_t itemCount, const std::shared_ptr<Item> &item, bool cyclopedia) {
+void ProtocolGame::sendItemInspection(uint16_t itemId, uint8_t itemCount, const std::shared_ptr<Item> &item, uint8_t inspectionType) {
 	if (oldProtocol) {
 		return;
 	}
@@ -2293,7 +2339,13 @@ void ProtocolGame::sendItemInspection(uint16_t itemId, uint8_t itemCount, const 
 	NetworkMessage msg;
 	msg.addByte(0x76);
 	msg.addByte(0x00);
-	msg.addByte(cyclopedia ? 0x01 : 0x00);
+	if (inspectionType == INSPECT_CYCLOPEDIA) {
+		msg.addByte(0x01);
+	} else if (inspectionType == INSPECT_PROFICIENCY) {
+		msg.addByte(0x02);
+	} else {
+		msg.addByte(0x00);
+	}
 	msg.add<uint32_t>(player->getID()); // 13.00 Creature ID
 	msg.addByte(0x01);
 
@@ -5486,10 +5538,13 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId) {
 
 	// Only use here locker items, itemVector is for use of Game::createMarketOffer
 	auto [itemVector, lockerItems] = player->requestLockerItems(depotLocker, true);
-	auto totalItemsCountPosition = msg.getBufferPosition();
-	msg.skipBytes(2); // Total items count
 
-	uint16_t totalItemsCount = 0;
+	uint16_t totalItems = 0;
+	for (const auto &entry : lockerItems) {
+		totalItems += entry.second.size();
+	}
+	msg.add<uint16_t>(totalItems);
+
 	for (const auto &[itemId, tierAndCountMap] : lockerItems) {
 		for (const auto &[tier, count] : tierAndCountMap) {
 			msg.add<uint16_t>(itemId);
@@ -5497,12 +5552,9 @@ void ProtocolGame::sendMarketEnter(uint32_t depotId) {
 				msg.addByte(tier);
 			}
 			msg.add<uint16_t>(static_cast<uint16_t>(count));
-			totalItemsCount++;
 		}
 	}
 
-	msg.setBufferPosition(totalItemsCountPosition);
-	msg.add<uint16_t>(totalItemsCount);
 	writeToOutputBuffer(msg);
 
 	updateCoinBalance();
@@ -5546,8 +5598,8 @@ void ProtocolGame::updateCoinBalance() {
 		[playerId = player->getID()] {
 			const auto &threadPlayer = g_game().getPlayerByID(playerId);
 			if (threadPlayer && threadPlayer->getAccount()) {
-				const auto [coins, errCoin] = threadPlayer->getAccount()->getCoins(CoinType::Normal);
-				const auto [transferCoins, errTCoin] = threadPlayer->getAccount()->getCoins(CoinType::Transferable);
+				const auto [coins, errCoin] = threadPlayer->getAccount()->getCoins(enumToValue(CoinType::Normal));
+				const auto [transferCoins, errTCoin] = threadPlayer->getAccount()->getCoins(enumToValue(CoinType::Transferable));
 
 				threadPlayer->coinBalance = coins;
 				threadPlayer->coinTransferableBalance = transferCoins;
@@ -7305,7 +7357,11 @@ void ProtocolGame::sendAddCreature(const std::shared_ptr<Creature> &creature, co
 	msg.add<uint16_t>(static_cast<uint16_t>(g_configManager().getNumber(STORE_COIN_PACKET)));
 
 	if (!oldProtocol) {
-		msg.addByte(shouldAddExivaRestrictions ? 0x01 : 0x00); // exiva button enabled
+		const bool exivaEnabled = g_game().getWorldType() == WORLDTYPE_OPTIONAL || !g_configManager().getBoolean(EXIVA_RESTRICTIONS_ONLY_OPTIONAL_WORLDS);
+		msg.addByte(exivaEnabled ? 0x01 : 0x00); // exiva button enabled
+		if (exivaEnabled) {
+			sendExivaRestrictions(true);
+		}
 	}
 
 	writeToOutputBuffer(msg);
@@ -8766,7 +8822,11 @@ void ProtocolGame::sendSpecialContainersAvailable() {
 	NetworkMessage msg;
 	msg.addByte(0x2A);
 	msg.addByte(player->isStashMenuAvailable() ? 0x01 : 0x00);
-	msg.addByte(player->isMarketMenuAvailable() ? 0x01 : 0x00);
+	if (g_configManager().getBoolean(ENABLE_MARKET)) {
+		msg.addByte(player->isMarketMenuAvailable() ? 0x01 : 0x00);
+	} else {
+		msg.addByte(0x00);
+	}
 	writeToOutputBuffer(msg);
 }
 
@@ -9293,11 +9353,11 @@ void ProtocolGame::sendOpenStash() {
 
 	NetworkMessage msg;
 	msg.addByte(0x29);
-	StashItemList list = player->getStashItems();
+	const auto &list = player->getStashItems();
 	msg.add<uint16_t>(list.size());
-	for (auto item : list) {
-		msg.add<uint16_t>(item.first);
-		msg.add<uint32_t>(item.second);
+	for (const auto &[itemId, itemCount] : list) {
+		msg.add<uint16_t>(itemId);
+		msg.add<uint32_t>(itemCount);
 	}
 
 	writeToOutputBuffer(msg);
@@ -10549,4 +10609,104 @@ void ProtocolGame::sendWeaponProficiencyInfo(const uint16_t itemId) {
 		}
 		writeToOutputBuffer(msg);
 	}
+}
+
+void ProtocolGame::parseExivaRestrictions(NetworkMessage &msg) {
+	if (!player || (g_game().getWorldType() == WORLDTYPE_OPTIONAL && !g_configManager().getBoolean(EXIVA_RESTRICTIONS_ONLY_OPTIONAL_WORLDS))) {
+		return;
+	}
+
+	auto &restrictions = player->getExivaRestrictions();
+
+	restrictions.allowAll = msg.getByte();
+	restrictions.allowOwnGuild = msg.getByte();
+	restrictions.allowOwnParty = msg.getByte();
+	restrictions.allowVipList = msg.getByte();
+	restrictions.allowPlayerWhitelist = msg.getByte();
+	restrictions.allowGuildWhitelist = msg.getByte();
+
+	const int32_t MAX_EXIVA_WHITELIST = g_configManager().getNumber(ConfigKey_t::MAX_EXIVA_WHITELIST);
+
+	std::vector<std::string> addedPlayerNames;
+	std::unordered_set<uint32_t> addedPlayerGuids;
+	addExivaEntries(msg, restrictions.playerWhitelist, addedPlayerNames, addedPlayerGuids, MAX_EXIVA_WHITELIST, [](const std::string &n) {
+		return IOLoginData::getGuidByName(n);
+	});
+
+	std::vector<std::string> removedPlayerNames;
+	std::unordered_set<uint32_t> removedPlayerGuids;
+	removeExivaEntries(msg, restrictions.playerWhitelist, removedPlayerNames, removedPlayerGuids, MAX_EXIVA_WHITELIST, [](const std::string &n) {
+		return IOLoginData::getGuidByName(n);
+	});
+
+	std::vector<std::string> addedGuildNames;
+	std::unordered_set<uint32_t> addedGuildIds;
+	addExivaEntries(msg, restrictions.guildWhitelist, addedGuildNames, addedGuildIds, MAX_EXIVA_WHITELIST, [](const std::string &n) {
+		return IOGuild::getGuildIdByName(n);
+	});
+
+	std::vector<std::string> removedGuildNames;
+	std::unordered_set<uint32_t> removedGuildIds;
+	removeExivaEntries(msg, restrictions.guildWhitelist, removedGuildNames, removedGuildIds, MAX_EXIVA_WHITELIST, [](const std::string &n) {
+		return IOGuild::getGuildIdByName(n);
+	});
+
+	sendExivaRestrictions(false, addedPlayerNames, removedPlayerNames, addedGuildNames, removedGuildNames);
+}
+
+void ProtocolGame::sendExivaRestrictions(
+	bool isLogin /* = false */,
+	const std::vector<std::string> &addedPlayerNames /* = {} */,
+	const std::vector<std::string> &removedPlayerNames /* = {} */,
+	const std::vector<std::string> &addedGuildNames /* = {} */,
+	const std::vector<std::string> &removedGuildNames /* = {} */
+) {
+	const auto &restrictions = player->getExivaRestrictions();
+
+	NetworkMessage msg;
+
+	msg.addByte(0xCA);
+	msg.addByte(restrictions.allowAll);
+	msg.addByte(restrictions.allowOwnGuild);
+	msg.addByte(restrictions.allowOwnParty);
+	msg.addByte(restrictions.allowVipList);
+	msg.addByte(restrictions.allowPlayerWhitelist);
+	msg.addByte(restrictions.allowGuildWhitelist);
+
+	if (isLogin) {
+		msg.add<uint16_t>(restrictions.playerWhitelist.size());
+		for (const auto &guid : restrictions.playerWhitelist) {
+			msg.addString(IOLoginData::getNameByGuid(guid));
+		}
+		msg.add<uint16_t>(0x00);
+	} else {
+		msg.add<uint16_t>(addedPlayerNames.size());
+		for (const auto &addedName : addedPlayerNames) {
+			msg.addString(addedName);
+		}
+		msg.add<uint16_t>(removedPlayerNames.size());
+		for (const auto &removedName : removedPlayerNames) {
+			msg.addString(removedName);
+		}
+	}
+
+	if (isLogin) {
+		msg.add<uint16_t>(restrictions.guildWhitelist.size());
+		for (const auto &guildId : restrictions.guildWhitelist) {
+			auto guild = g_game().getGuild(guildId, true);
+			msg.addString(guild ? guild->getName() : "");
+		}
+		msg.add<uint16_t>(0x00);
+	} else {
+		msg.add<uint16_t>(addedGuildNames.size());
+		for (const auto &addedName : addedGuildNames) {
+			msg.addString(addedName);
+		}
+		msg.add<uint16_t>(removedGuildNames.size());
+		for (const auto &removedName : removedGuildNames) {
+			msg.addString(removedName);
+		}
+	}
+
+	writeToOutputBuffer(msg);
 }

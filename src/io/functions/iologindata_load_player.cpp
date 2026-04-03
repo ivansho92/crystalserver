@@ -42,6 +42,7 @@
 #include "items/containers/rewards/rewardchest.hpp"
 #include "creatures/players/player.hpp"
 #include "utils/tools.hpp"
+#include "kv/kv.hpp"
 
 void IOLoginDataLoad::loadItems(ItemsMap &itemsMap, const DBResult_ptr &result, const std::shared_ptr<Player> &player) {
 	try {
@@ -104,16 +105,16 @@ bool IOLoginDataLoad::preLoadPlayer(const std::shared_ptr<Player> &player, const
 		return false;
 	}
 
-	auto [coins, error] = player->account->getCoins(CoinType::Normal);
-	if (error != AccountErrors_t::Ok) {
+	auto [coins, error] = player->account->getCoins(enumToValue(CoinType::Normal));
+	if (error != enumToValue(AccountErrors_t::Ok)) {
 		g_logger().error("Failed to get coins for player {}, error {}", player->name, static_cast<uint8_t>(error));
 		return false;
 	}
 
 	player->coinBalance = coins;
 
-	auto [transferableCoins, errorT] = player->account->getCoins(CoinType::Transferable);
-	if (errorT != AccountErrors_t::Ok) {
+	auto [transferableCoins, errorT] = player->account->getCoins(enumToValue(CoinType::Transferable));
+	if (errorT != enumToValue(AccountErrors_t::Ok)) {
 		g_logger().error("Failed to get transferable coins for player {}, error {}", player->name, static_cast<uint8_t>(errorT));
 		return false;
 	}
@@ -528,7 +529,7 @@ void IOLoginDataLoad::loadPlayerBestiaryCharms(const std::shared_ptr<Player> &pl
 		}
 
 		unsigned long attrBestSize;
-		const char* Bestattr = result->getStream("tracker list", attrBestSize);
+		const char* Bestattr = result->getStream("tracker_list", attrBestSize);
 		PropStream propBestStream;
 		propBestStream.init(Bestattr, attrBestSize);
 
@@ -557,7 +558,7 @@ void IOLoginDataLoad::loadPlayerInstantSpellList(const std::shared_ptr<Player> &
 	query << "SELECT `player_id`, `name` FROM `player_spells` WHERE `player_id` = " << player->getGUID();
 	if ((result = db.storeQuery(query.str()))) {
 		do {
-			player->learnedInstantSpellList.emplace_back(result->getString("name"));
+			player->learnedInstantSpellList.emplace(result->getString("name"));
 		} while (result->next());
 	}
 }
@@ -1091,5 +1092,51 @@ void IOLoginDataLoad::loadPlayerWeaponProficiency(const std::shared_ptr<Player> 
 		}
 
 		player->weaponProficiencies[itemId] = std::move(data);
+	}
+}
+
+void IOLoginDataLoad::loadPlayerExivaRestrictions(const std::shared_ptr<Player> &player) {
+	if (!player) {
+		g_logger().warn("[{}] - Player nullptr", __FUNCTION__);
+		return;
+	}
+
+	auto &restrictions = player->getExivaRestrictions();
+
+	const auto &scope = player->kv()->scoped("exiva-restrictions");
+
+	if (auto v = scope->get("allowAll")) {
+		restrictions.allowAll = v->getNumber() != 0;
+	}
+	if (auto v = scope->get("allowOwnGuild")) {
+		restrictions.allowOwnGuild = v->getNumber() != 0;
+	}
+	if (auto v = scope->get("allowOwnParty")) {
+		restrictions.allowOwnParty = v->getNumber() != 0;
+	}
+	if (auto v = scope->get("allowVipList")) {
+		restrictions.allowVipList = v->getNumber() != 0;
+	}
+	if (auto v = scope->get("allowPlayerWhitelist")) {
+		restrictions.allowPlayerWhitelist = v->getNumber() != 0;
+	}
+	if (auto v = scope->get("allowGuildWhitelist")) {
+		restrictions.allowGuildWhitelist = v->getNumber() != 0;
+	}
+
+	const auto playerWhitelistOpt = scope->get("playerWhitelist");
+	if (playerWhitelistOpt.has_value()) {
+		const auto playerWhitelist = playerWhitelistOpt.value().get<ArrayType>();
+		for (const auto &playerGuid : playerWhitelist) {
+			restrictions.playerWhitelist.push_back(playerGuid.get<IntType>());
+		}
+	}
+
+	const auto guildWhitelistOpt = scope->get("guildWhitelist");
+	if (guildWhitelistOpt.has_value()) {
+		const auto guildWhitelist = guildWhitelistOpt.value().get<ArrayType>();
+		for (const auto &guildId : guildWhitelist) {
+			restrictions.guildWhitelist.push_back(guildId.get<IntType>());
+		}
 	}
 }
