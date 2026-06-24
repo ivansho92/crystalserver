@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<npcs>
+	<npc centerx="1014" centery="1024" centerz="5" radius="2">
+		<npc name="Tamoril" x="-1" y="0" z="5" spawntime="90" direction="2" />
+	</npc>
+	<npc centerx="985" centery="991" centerz="6" radius="1">
+		<npc name="Battlemart" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="988" centery="1023" centerz="6" radius="1">
+		<npc name="Haroun" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="996" centery="1023" centerz="6" radius="1">
+		<npc name="Alesar" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="1002" centery="1025" centerz="6" radius="1">
+		<npc name="Esrik" x="-1" y="1" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="984" centery="1030" centerz="6" radius="1">
+		<npc name="Yasir" x="1" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="1004" centery="1031" centerz="6" radius="1">
+		<npc name="Yaman" x="0" y="1" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="990" centery="1036" centerz="6" radius="1">
+		<npc name="Nah'Bob" x="1" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="997" centery="1036" centerz="6" radius="1">
+		<npc name="Rashid of Island" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="979" centery="1942" centerz="6" radius="1">
+		<npc name="Captain Sinbeard" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="958" centery="1944" centerz="6" radius="1">
+		<npc name="Arito" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="973" centery="1944" centerz="6" radius="1">
+		<npc name="Guide Rahlkora" x="0" y="0" z="6" spawntime="60" />
+	</npc>
+	<npc centerx="1059" centery="1018" centerz="7" radius="3">
+		<npc name="Zuma Magehide" x="-1" y="1" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1066" centery="1018" centerz="7" radius="3">
+		<npc name="Runtel Blackspark" x="0" y="3" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1003" centery="1019" centerz="7" radius="1">
+		<npc name="Hanna" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="990" centery="1027" centerz="7" radius="1">
+		<npc name="Archery" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="994" centery="1034" centerz="7" radius="1">
+		<npc name="Rock In A Hard Place" x="-1" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1001" centery="1036" centerz="7" radius="1">
+		<npc name="Lailene" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1305" centery="1056" centerz="7" radius="1">
+		<npc name="Zurak (Arena)" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1332" centery="1197" centerz="7" radius="1">
+		<npc name="Gate Guardian" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1540" centery="1361" centerz="7" radius="1">
+		<npc name="Emberwing" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1321" centery="1724" centerz="7" radius="1">
+		<npc name="Asnarus" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1305" centery="1726" centerz="7" radius="1">
+		<npc name="Auron" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1338" centery="1729" centerz="7" radius="1">
+		<npc name="Siestaar" x="0" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1627" centery="1760" centerz="7" radius="1">
+		<npc name="Cold Percht Sleigh" x="0" y="1" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1628" centery="1763" centerz="7" radius="1">
+		<npc name="Bright Percht Sleigh" x="-1" y="0" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1625" centery="1765" centerz="7" radius="1">
+		<npc name="Dark Percht Sleigh" x="1" y="-1" z="7" spawntime="60" />
+	</npc>
+	<npc centerx="1239" centery="1982" centerz="8" radius="1">
+		<npc name="Ortelio" x="1" y="0" z="8" spawntime="60" />
+	</npc>
+</npcs>
